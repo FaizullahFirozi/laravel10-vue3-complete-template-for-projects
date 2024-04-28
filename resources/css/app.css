@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback');
 @import 'admin-lte/plugins/fontawesome-free/css/all.min.css';
+@import 'admin-lte/plugins/flag-icon-css/css/flag-icons.min.css';
+
 
 @import 'admin-lte/dist/css/adminlte_rtl.min.css';
 /*if you want to change to English ltr*****/

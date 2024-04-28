@@ -3,13 +3,13 @@ import Dashboard2 from './components/Dashboard2.vue';
 
 export default [
     {
-        path: '/dashboard',
-        name: 'dashboard',
+        path: '/admin/dashboard',
+        name: '/admin/dashboard',
         component: Dashboard,
     },
     {
-        path: '/dashboard2',
-        name: 'dashboard2',
+        path: '/admin/dashboard2',
+        name: '/admin/dashboard2',
         component: Dashboard2,
     },
-]
+];

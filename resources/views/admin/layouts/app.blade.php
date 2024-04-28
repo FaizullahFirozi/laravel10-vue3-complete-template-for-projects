@@ -29,13 +29,13 @@
                     <a class="nav-link" href="#" role="button"><i class="mode_icon_frz fas fa-moon"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a href="index3.html" class="nav-link">Home</a>
+                    <router-link to="/admin/dashboard" active-class="active" class="nav-link">Home</router-link>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
                     <a href="#" class="nav-link">Contact</a>
                 </li>
             </ul>
-
+          
             <!-- left navbar links -->
             <ul class="navbar-nav ml-auto">
                 <!-- Navbar Search -->
@@ -149,6 +149,23 @@
                         <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
                     </div>
                 </li>
+                <!-- Language Dropdown Menu -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link" data-toggle="dropdown" href="#">
+                        <i class="flag-icon flag-icon-sa"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-left p-0">
+                        <a href="#" class="dropdown-item active">
+                            <i class="flag-icon flag-icon-af ml-2"></i> Pashto
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i class="flag-icon flag-icon-tj ml-2"></i> Dari
+                        </a>
+                        <a href="#" class="dropdown-item ">
+                            <i class="flag-icon flag-icon-us ml-2"></i> English
+                        </a>
+                    </div>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" data-widget="fullscreen" href="#" role="button">
                         <i class="fas fa-expand-arrows-alt"></i>
@@ -206,7 +223,7 @@
                         <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
                         <li class="nav-item">
-                            <router-link to="/dashboard" active-class="active" class="nav-link">
+                            <router-link to="/admin/dashboard" active-class="active" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
                                     Dashboard
@@ -214,7 +231,7 @@
                             </router-link>
                         </li>
                         <li class="nav-item">
-                            <router-link to="/dashboard2" active-class="active" class="nav-link">
+                            <router-link to="/admin/dashboard2" active-class="active" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
                                     Dashboard 2
@@ -259,10 +276,8 @@
             </div>
             <!-- /.sidebar -->
         </aside>
-
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
-
             <router-view></router-view>
 
         </div>
@@ -290,7 +305,7 @@
         </footer>
     </div>
     <!-- ./wrapper -->
-
+    
     <script>
         // Faizullah Firozi. This code is only for ****START**** Collapse the SIDEBAR 
         document.addEventListener('DOMContentLoaded', () => {

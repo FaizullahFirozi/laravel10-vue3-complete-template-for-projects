@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApplicationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,14 +14,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+
+Route::get('/test', function () {
+    return 'this is new value'. '2 + 2 ='. 21 * 12;
 });
 
 Route::get('/welcome', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('app');
-});
+
+
+
+
+Route::get('{view}', ApplicationController::class)->where('view', '.*');
