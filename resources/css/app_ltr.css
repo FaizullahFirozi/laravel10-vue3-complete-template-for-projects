@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback');
 @import 'admin-lte/plugins/fontawesome-free/css/all.min.css';
 
-@import 'admin-lte/dist/css/adminlte_rtl.min.css';
-/*if you want to change to English ltr*****/
-/* @import 'admin-lte/dist/css/adminlte.min.css'; */
+/*if you want to change to Pashto rtl*****/
+/* @import 'admin-lte/dist/css/adminlte_rtl.min.css'; */
+@import 'admin-lte/dist/css/adminlte.min.css';
