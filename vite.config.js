@@ -14,8 +14,17 @@ export default defineConfig({
                 transformAssetUrls: {
                     base: null,
                     includeAbsolute: false,
-                }
-            }
-        }),
+                },
+            },
+        }), 
     ],
+    resolve: {
+        alias: {
+            vue: 'vue/dist/vue.esm-bundler.js',
+        },
+    },
+    server: { // it's default port is 5173 change by frz
+        port: 3000,
+    }
+    
 });

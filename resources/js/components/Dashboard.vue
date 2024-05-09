@@ -96,6 +96,9 @@
                     </div>
                 </div>
                 <!-- /.col-md-6 -->
+                <h1>{{ message }}</h1>
+                <h1>{{ name }}</h1>
+                <h1>{{ last }}</h1>
             </div>
             <!-- /.row -->
         </div>
@@ -103,3 +106,28 @@
     </div>
     <!-- /.content -->
 </template>
+
+
+<script>
+export default {
+    data() {
+        return {
+            message : 'this is by faizullah firozi wardak',
+            name : 'faizullah wardak',
+            last : ' firozi',
+            province : 'wardak',
+        }
+    }
+}
+</script>
+
+
+<!-- <script>
+    export default {
+        data() {
+            return {
+                message: 'this is from some text'
+            };
+        }
+    };
+</script> -->

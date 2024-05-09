@@ -24,7 +24,4 @@ Route::get('/welcome', function () {
 });
 
 
-
-
-
 Route::get('{view}', ApplicationController::class)->where('view', '.*');

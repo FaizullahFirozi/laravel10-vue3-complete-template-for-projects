@@ -1,11 +1,18 @@
 import './bootstrap';
 
+// THIS FOR ADMINLTE3 FILES
 import 'admin-lte/plugins/jquery/jquery.min.js';
 import 'admin-lte/plugins/bootstrap/js/bootstrap.bundle.min.js';
 import 'admin-lte/dist/js/adminlte.min.js';
 import 'admin-lte/dist/js/demo.js';
 
-import { createApp } from 'vue/dist/vue.esm-bundler.js';
+// FOR ADDING SIDEBAR AND NAVBAR TO BLADE
+import Sidebar from './components/layouts/Sidebar.vue';
+import Navbar from './components/layouts/Navbar.vue';
+import Footer from './components/layouts/Footer.vue';
+
+// FOR GENERAL SECTION
+import { createApp } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import Routes from './routes.js';
 
@@ -25,6 +32,9 @@ const i18n = createI18n({
 });
 
 const app = createApp({});
+app.component('sidebar_vue', Sidebar);
+app.component('navbar_vue', Navbar);
+app.component('footer_vue', Footer)
 
 const router = createRouter({
     routes: Routes,
