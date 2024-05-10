@@ -2,6 +2,8 @@
 @import 'admin-lte/plugins/fontawesome-free/css/all.min.css';
 @import 'admin-lte/plugins/flag-icon-css/css/flag-icons.min.css';
 
+@import "vue3-ui-preloader/dist/loader.css";
+
 
 @import 'admin-lte/dist/css/adminlte_rtl.min.css';
 /*if you want to change to English ltr*****/

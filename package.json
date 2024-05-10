@@ -16,6 +16,7 @@
         "vee-validate": "^4.12.6",
         "vue-i18n": "^9.13.1",
         "vue-router": "^4.3.2",
+        "vue3-ui-preloader": "^1.0.4",
         "yup": "^1.4.0"
     }
 }

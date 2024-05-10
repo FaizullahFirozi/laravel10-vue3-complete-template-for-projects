@@ -11,17 +11,23 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     {{-- @vite(['resources/css/app_rtl.css', 'resources/js/app.js']) --}}
 
-
 </head>
 
 <body class="hold-transition sidebar-mini  layout-fixed">
-    <div class="wrapper" id="app">
 
+    <div class="wrapper" id="app">
+        {{-- name="loading"  --}}
+        {{-- name="spinning"  --}}
+        {{-- name="dots"  --}}
+        {{-- name="circular"  --}}
+        <loader_vue id="loader_vue_show" name="loading" loadingText="youuuuu..." textColor="#ffffff" textSize="15"
+            textWeight="800" object="#ff9633" color1="#ffffff" color2="#17fd3d" size="5" speed="2"
+            bg="#343a40" objectbg="#999793" opacity="80" :disableScrolling="false"></loader_vue>
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand navbar-light">
 
             {{-- NAVBAR SECTION FROM VUE --}}
-           <navbar_vue></navbar_vue> 
+            <navbar_vue></navbar_vue>
             {{-- NAVBAR SECTION FROM VUE --}}
 
         </nav>
@@ -71,7 +77,7 @@
 
         <!-- Main Footer -->
         <footer class="main-footer">
-           <footer_vue></footer_vue>
+            <footer_vue></footer_vue>
         </footer>
     </div>
     <!-- ./wrapper -->
@@ -144,6 +150,17 @@
             applyThemeMode();
         });
         // Dark Mode theme *****END***** 
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const loader_vue_show = document.getElementById('loader_vue_show');
+            // Show the loader after 1 second
+            setTimeout(function() {
+                loader_vue_show.style.display = 'none'
+            }, 1000);
+        });
     </script>
 
 </body>

@@ -1,5 +1,6 @@
 <template>
-    <!-- Content Header (Page header) -->
+    
+
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
@@ -28,8 +29,8 @@
     <div class="content">
         <div class="container-fluid">
             <span>
-                {{ $t('test_localizition') }}
-                {{ $t('test_localizition') }}
+                {{ $t("test_localizition") }}
+                {{ $t("test_localizition") }}
             </span>
             <div class="row">
                 <div class="col-lg-6">
@@ -107,20 +108,19 @@
     <!-- /.content -->
 </template>
 
-
 <script>
 export default {
     data() {
         return {
-            message : 'this is by faizullah firozi wardak',
-            name : 'faizullah wardak',
-            last : ' firozi',
-            province : 'wardak',
-        }
-    }
-}
-</script>
+            message: "this is by faizullah firozi wardak",
+            name: "faizullah wardak",
+            last: " firozi",
+            province: "wardak",
+        };
+    },
 
+};
+</script>
 
 <!-- <script>
     export default {
