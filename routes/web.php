@@ -3,6 +3,7 @@
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\CrudTestController;
 use Illuminate\Support\Facades\Route;
+use Spatie\Activitylog\Models\Activity;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,7 +18,11 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/test', function () {
-    return 'this is new value'. '2 + 2 ='. 21 * 12;
+    // activity()->log('Look mum, I logged something');
+    $lastActivity = Activity::all()->last(); //returns the last logged activity
+    return $lastActivity->description; //returns 'Look mum, I logged something';
+
+    // return 'this is new value'. '2 + 2 ='. 21 * 12;
 });
 
 Route::get('/welcome', function () {

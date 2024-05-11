@@ -169,7 +169,9 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        // ADDED BY FAIZULLAH FIROZI
         Spatie\Permission\PermissionServiceProvider::class,
+        Ladumor\LaravelPwa\PWAServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -185,6 +187,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
+        'LaravelPwa' => \Ladumor\LaravelPwa\LaravelPwa::class,
     ])->toArray(),
 
 ];
