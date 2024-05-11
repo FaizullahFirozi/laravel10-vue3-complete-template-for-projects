@@ -12,13 +12,13 @@ import loader from 'vue3-ui-preloader';
 
 
 // FOR ADDING SIDEBAR AND NAVBAR TO BLADE
-import Sidebar from './components/layouts/Sidebar.vue';
-import Navbar from './components/layouts/Navbar.vue';
-import Footer from './components/layouts/Footer.vue';
+import Sidebar from './components/pages/layouts/Sidebar.vue';
+import Navbar from './components/pages/layouts/Navbar.vue';
+import Footer from './components/pages/layouts/Footer.vue';
 
 
 // FOR GENERAL SECTION
-import { createApp } from 'vue';
+import { createApp } from 'vue/dist/vue.esm-bundler.js';
 import { createRouter, createWebHistory } from 'vue-router';
 import Routes from './routes.js';
 

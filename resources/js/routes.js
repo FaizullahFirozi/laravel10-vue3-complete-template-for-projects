@@ -5,11 +5,16 @@ export default [
     {
         path: '/admin/dashboard',
         name: '/admin/dashboard',
-        component: () => import('./components/Dashboard.vue'), //good way for dynamic load
+        component: () => import('./components/pages/Dashboard.vue'), //good way for dynamic load
     },
     {
         path: '/admin/dashboard2',
         name: '/admin/dashboard2',
-        component: () => import('./components/Dashboard2.vue'),
+        component: () => import('./components/pages/Dashboard2.vue'),
+    },
+    {
+        path: '/admin/crudTest',
+        name: '/admin/crudTest',
+        component: () => import('./components/pages/crudTest/crudTest.vue'),
     },
 ];

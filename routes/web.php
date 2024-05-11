@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\CrudTestController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,6 +23,8 @@ Route::get('/test', function () {
 Route::get('/welcome', function () {
     return view('welcome');
 });
+
+Route::resource('/api/crudtest', CrudTestController::class);
 
 
 Route::get('{view}', ApplicationController::class)->where('view', '.*');
