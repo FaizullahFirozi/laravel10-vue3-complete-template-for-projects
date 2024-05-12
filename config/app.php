@@ -172,6 +172,7 @@ return [
         // ADDED BY FAIZULLAH FIROZI
         Spatie\Permission\PermissionServiceProvider::class,
         Ladumor\LaravelPwa\PWAServiceProvider::class,
+        App\Providers\FortifyServiceProvider::class,
     ])->toArray(),
 
     /*

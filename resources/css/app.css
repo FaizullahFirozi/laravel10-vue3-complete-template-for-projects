@@ -2,6 +2,10 @@
 @import 'admin-lte/plugins/fontawesome-free/css/all.min.css';
 @import 'admin-lte/plugins/flag-icon-css/css/flag-icons.min.css';
 
+/* THIS IS ONLY FOR LOGIN PAGE */
+@import 'admin-lte/plugins/icheck-bootstrap/icheck-bootstrap.min.css';
+
+
 @import "vue3-ui-preloader/dist/loader.css";
 
 
