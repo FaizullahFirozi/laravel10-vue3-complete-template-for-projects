@@ -69,6 +69,15 @@
                     <p>CRUD Test</p>
                 </router-link>
             </li>
+            <li class="nav-item">
+                <router-link
+                    to="/admin/profile"
+                    active-class="active"
+                    class="nav-link"
+                    ><i class="nav-icon fa fa-user"></i>
+                    <p>Profile</p>
+                </router-link>
+            </li>
 
             <li class="nav-item menu-open">
                 <a href="#" class="nav-link active">
@@ -110,6 +119,7 @@
                     </p>
                 </a>
             </li>
+           
         </ul>
     </nav>
     <!-- /.sidebar-menu -->

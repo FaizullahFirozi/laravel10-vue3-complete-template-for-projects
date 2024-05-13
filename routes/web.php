@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\CrudTestController;
 use Illuminate\Support\Facades\Route;
@@ -29,7 +30,18 @@ Route::get('/welcome', function () {
     return view('welcome');
 });
 
-Route::resource('/api/crudtest', CrudTestController::class);
+Route::middleware('auth')->group(function () {
 
+    Route::resource('/api/crudtest', CrudTestController::class);
 
-Route::get('{view}', ApplicationController::class)->where('view', '.*');
+    // Route::resource('/api/profile', ProfileController::class);
+    Route::get('/api/profile', [ProfileController::class, 'index']);
+    Route::put('/api/profile', [ProfileController::class, 'update']);
+    Route::post('/api/upload-profile-image', [ProfileController::class, 'uploadImage']);
+
+    // FOR CHANGE PASSWORD
+    Route::post('/api/change-user-password', [ProfileController::class, 'changePassword']);
+   
+});
+
+Route::get('{view}', ApplicationController::class)->where('view', '.*')->middleware('auth');
