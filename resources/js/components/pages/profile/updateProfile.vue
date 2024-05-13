@@ -308,6 +308,7 @@ onMounted(() => {
                                                             errors.current_password
                                                     }"
                                                     required
+                                                    autocomplete
                                                 />
                                                 <span
                                                     class="invalid-feedback"
@@ -334,6 +335,7 @@ onMounted(() => {
                                                             errors.password
                                                     }"
                                                     required
+                                                    autocomplete
                                                 />
                                                 <span
                                                     class="invalid-feedback"
@@ -360,6 +362,7 @@ onMounted(() => {
                                                             errors.password
                                                     }"
                                                     required
+                                                    autocomplete
                                                 />
                                                 <span
                                                     class="invalid-feedback"

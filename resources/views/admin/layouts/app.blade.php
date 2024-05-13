@@ -35,7 +35,17 @@
             {{-- NAVBAR SECTION FROM VUE --}}
             <navbar_vue></navbar_vue>
             {{-- NAVBAR SECTION FROM VUE --}}
+            @can('user')  
+               <span class="text-warning"> User can see</span>
+               @endcan
+            @can('admin')  
+               <span class="text-primary"> Admin can see</span>
+            @endcan
+            @can('super-admin')  
+               <span class="text-danger"> Super Admin can see</span>
+            @endcan
 
+            
         </nav>
         <!-- /.navbar -->
 

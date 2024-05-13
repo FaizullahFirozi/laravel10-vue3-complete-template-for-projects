@@ -21,8 +21,6 @@ class User extends Authenticatable
      // this method for LogsActivity only; **********
      public function getActivitylogOptions(): LogOptions
      {
-    activity()->log('Look mum, I logged something');
-
          return LogOptions::defaults()
              ->useLogName('کارمندان')
              ->logOnly(['*'])->logOnlyDirty(); // Replace with the desired attributes to be logged
