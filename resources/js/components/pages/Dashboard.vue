@@ -94,10 +94,18 @@
                         </div>
                     </div>
                 </div>
-                <!-- /.col-md-6 -->
-                <h1>{{ message }}</h1>
-                <h1>{{ name }}</h1>
-                <h1>{{ last }}</h1>
+                <div v-if="can('test-read')">
+                    <!-- /.col-md-6 -->
+                    <h1>{{ message }}</h1>
+                    <h1>{{ name }}</h1>
+                    <h1>{{ last }}</h1>
+                </div>
+                <hr />
+                <h1 v-if="is('User')">You are User</h1>
+                <hr />
+                <h1 v-if="is('Super Admin')">You are Super Admin <small class="text-danger">has some problem not show all</small></h1>
+                <hr />
+                <h1 v-if="is('Admin')">You are Admin</h1>
             </div>
             <!-- /.row -->
         </div>

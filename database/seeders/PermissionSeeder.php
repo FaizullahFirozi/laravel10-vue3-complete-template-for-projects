@@ -44,13 +44,13 @@ class PermissionSeeder extends Seeder
 
 
         
-        // ***************
+        // ***************Super Admin
         // gets all permissions via Gate::before rule; see AuthServiceProvider
         // Super Admin not need to permissions or Roles*****
         Role::create(['name' => 'Super Admin']);
 
         
-        // ***************
+        // ***************Admin
         $role = Role::create(['name' => 'Admin']);
 
         $adminPermissions = [
@@ -66,7 +66,7 @@ class PermissionSeeder extends Seeder
 
 
         
-        // *****************
+        // *****************User
         $role = Role::create(['name' => 'User']);
 
         $userPermissions = [

@@ -13,6 +13,15 @@
     <link rel="manifest" href="{{ asset('/manifest.json') }}">
     <!-- PWA END  -->
 
+    {{--  pass permissions from Laravel To Vuejs, --}}
+    <script type="text/javascript">
+        window.Laravel = {
+            csrfToken: "{{ csrf_token() }}",
+            jsPermissions: {!! auth()->check()?auth()->user()->jsPermissions():0 !!}
+        }
+    </script>
+    {{-- END pass permissions from Laravel To Vuejs, --}}
+
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     {{-- @vite(['resources/css/app_rtl.css', 'resources/js/app.js']) --}}

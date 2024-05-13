@@ -14,9 +14,12 @@ use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasRoles;
 
+// ADD FOR VUE SECTION PERMISSION
+use LaravelAndVueJS\Traits\LaravelPermissionToVueJS;
+
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles, LogsActivity;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles, LogsActivity, LaravelPermissionToVueJS;
 
      // this method for LogsActivity only; **********
      public function getActivitylogOptions(): LogOptions

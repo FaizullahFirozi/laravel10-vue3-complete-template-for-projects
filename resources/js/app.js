@@ -9,6 +9,9 @@ import 'admin-lte/dist/js/adminlte.min.js';
 // for preloader
 import loader from 'vue3-ui-preloader';
 
+// FOR laravel-permission-to-vuejs
+import LaravelPermissionToVueJS from 'laravel-permission-to-vuejs'
+
 
 
 // FOR ADDING SIDEBAR AND NAVBAR TO BLADE
@@ -58,6 +61,7 @@ app.component('Login_vue', Login);
 
 
 
+
 const router = createRouter({
     routes: Routes,
     history: createWebHistory(),
@@ -66,6 +70,9 @@ const router = createRouter({
 
 app.use(i18n);
 app.use(router);
+
+// FOR PERMISSIONS
+app.use(LaravelPermissionToVueJS);
 
 
 
