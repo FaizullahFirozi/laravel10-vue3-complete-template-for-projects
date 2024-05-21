@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -12,7 +13,10 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $this->authorize('test-read');
+
+        $users = User::latest()->get();
+        return $users;
     }
 
     /**
@@ -28,7 +32,36 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+       
+        $dataValide = request()->validate([
+            'name' => 'required',
+            'last_name' => 'required',
+            'father_name' => 'required',
+            'nic' => 'required|unique:users,nic',
+            'hire_date' => 'required',
+            'phone' => 'required|unique:users,phone|min:10',
+            'email' => 'required|unique:users,email|max:128',
+        ]);
+
+
+        if ($dataValide) {
+
+          return User::create([
+                'name' => request('name'),
+                'last_name' => request('last_name'),
+                'father_name' => request('father_name'),
+                'dob' => 2011,
+                'nic' => request('nic'),
+                'hire_date' => request('hire_date'),
+                'gross_salary' => 12000,
+                'phone' => request('phone'),
+                'photo' => 'photo',
+                'account_status' => 0,
+                'email' => request('email'),
+                'password' => bcrypt(request('password')),
+            ]);
+            
+        }
     }
 
     /**
@@ -50,16 +83,50 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(User $user)
     {
-        //
+       
+        $dataValide = request()->validate([
+            'name' => 'required',
+            'last_name' => 'required',
+            'father_name' => 'required',
+            'nic' => 'required',
+            'hire_date' => 'required',
+            'phone' => 'required|unique:users,phone, '. $user->id,'|min:10',
+            'email' => 'required|unique:users,email, '. $user->id,'|max:128',
+        ]);
+
+
+        if ($dataValide) {
+
+           $user->update([
+                'name' => request('name'),
+                'last_name' => request('last_name'),
+                'father_name' => request('father_name'),
+                'dob' => 2011,
+                'nic' => request('nic'),
+                'hire_date' => request('hire_date'),
+                'gross_salary' => 12000,
+                'phone' => request('phone'),
+                'photo' => 'photo',
+                'account_status' => 0,
+                'email' => request('email'),
+                'password' => request('password') ? bcrypt(request('password')) : $user->password,
+            ]);
+
+            return $user;
+            
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $user)
     {
-        //
+        $this->authorize('user-delete');
+
+        $user->delete();
+        return response()->noContent();
     }
 }

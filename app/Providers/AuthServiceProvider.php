@@ -29,7 +29,7 @@ class AuthServiceProvider extends ServiceProvider
         Gate::before(function ($user, $ability) {
             return $user->hasRole('Super Admin') ? true : null;
         });
-
+ 
 
         // for after checking All Gates. when not true then then check Super Admin by firozi
         // Gate::after(function($user, $ability){
@@ -38,4 +38,5 @@ class AuthServiceProvider extends ServiceProvider
         //      }
         // });
     }
+   
 }

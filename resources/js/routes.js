@@ -1,12 +1,18 @@
 // import Dashboard from './components/Dashboard.vue'; //this is bad way when load page all will be loaded.
 // import Dashboard2 from './components/Dashboard2.vue';
 
+
 export default [
    
     {
         path: '/login',
         name: 'admin.login',
         component: () => import('./components/pages/auth/Login.vue'), //good way for dynamic load
+    },
+    {
+        path: '/admin/users',
+        name: 'admin.users',
+        component: () => import('./components/pages/users/UsersList.vue'), //good way for dynamic load
     },
     {
         path: '/admin/profile',
@@ -24,8 +30,13 @@ export default [
         component: () => import('./components/pages/Dashboard2.vue'),
     },
     {
-        path: '/admin/crudTest',
+        path: '/admin/CRUD-Test',
         name: 'admin.crudTest',
         component: () => import('./components/pages/crudTest/crudTest.vue'),
+    },
+    {
+        path: '/admin/activity-log',
+        name: 'admin.activity-log',
+        component: () => import('./components/pages/activityLog/ActivityLog.vue'),
     },
 ];

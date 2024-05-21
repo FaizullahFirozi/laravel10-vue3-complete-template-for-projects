@@ -46,7 +46,6 @@
                             <a href="#" class="card-link">Another link</a>
                         </div>
                     </div>
-
                     <div class="card card-primary card-outline">
                         <div class="card-body">
                             <h5 class="card-title">Card title</h5>
@@ -101,7 +100,7 @@
                     <h1>{{ last }}</h1>
                 </div>
                 <hr />
-                <h1 v-if="is('User')">You are User</h1>
+                <h1 v-if="is('User' || 'Super Admin')">You are User</h1>
                 <hr />
                 <h1 v-if="is('Super Admin')">You are Super Admin <small class="text-danger">has some problem not show all</small></h1>
                 <hr />

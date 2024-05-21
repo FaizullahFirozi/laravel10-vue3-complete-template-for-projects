@@ -60,8 +60,6 @@ app.component('loader_vue', loader);
 app.component('Login_vue', Login);
 
 
-
-
 const router = createRouter({
     routes: Routes,
     history: createWebHistory(),
@@ -73,6 +71,7 @@ app.use(router);
 
 // FOR PERMISSIONS
 app.use(LaravelPermissionToVueJS);
+
 
 
 

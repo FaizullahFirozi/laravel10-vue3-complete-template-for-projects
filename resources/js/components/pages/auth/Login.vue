@@ -1,23 +1,29 @@
 <script setup>
 import axios from "axios";
 import { reactive, ref } from "vue";
+import { useToastr } from "@/toastr";
+const toastr = useToastr();
+
 const form = reactive({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
 });
 
 const loading_spinner = ref(false);
-const errorMessage = ref("");
+const errors = ref("");
 const handleSubmit = () => {
     loading_spinner.value = true;
-    errorMessage.value = "";
+    errors.value = "";
     axios
         .post("/login", form)
         .then(() => {
             window.location.href = "/admin/dashboard";
         })
         .catch((error) => {
-            errorMessage.value = error.response.data.message;
+            if (error.response && error.response.status === 422 || 429) {
+                errors.value = error.response.data.errors;
+                toastr.error("چاره ناکامه وه. بیا هڅه وکړئ", "مشکل");
+            }
         })
         .finally(() => {
             loading_spinner.value = false;
@@ -29,14 +35,16 @@ const handleSubmit = () => {
         <!-- /.login-logo -->
         <div class="card card-outline card-primary">
             <div class="card-header text-center">
-                <a href="../../index2.html" class="h1"><b>Admin</b>LTE</a>
+                <a href="#" class="h1"><b>Admin</b>LTE</a>
             </div>
             <div class="card-body">
                 <p class="login-box-msg">Sign in to start your session</p>
 
-                <div v-if="errorMessage" class="alert alert-danger text-left">
-                    {{ errorMessage }}
-                </div>
+                <!-- <div v-if="errors" class="alert alert-danger text-left">
+                    {{ errors.email[0] }}
+                    <br>
+                    {{ errors.password[0] }}
+                </div> -->
                 <form @submit.prevent="handleSubmit">
                     <div class="input-group mb-3">
                         <input
@@ -44,12 +52,19 @@ const handleSubmit = () => {
                             type="email"
                             class="form-control"
                             placeholder="Email"
+                            :class="{ 'is-invalid': errors.email }"
                         />
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-envelope"></span>
+
+                        <div class="input-group-append" >
+                            <div class="input-group-text" >
+                                <span class="fas fa-envelope" ></span>
                             </div>
                         </div>
+                        <span
+                            class="invalid-feedback"
+                            v-if="errors && errors.email"
+                            >{{ errors.email[0] }}</span
+                        >
                     </div>
                     <div class="input-group mb-3">
                         <input
@@ -58,12 +73,18 @@ const handleSubmit = () => {
                             class="form-control"
                             placeholder="Password"
                             autocomplete="autocomplete"
+                            :class="{ 'is-invalid': errors.password }"
                         />
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-lock"></span>
                             </div>
                         </div>
+                        <span
+                            class="invalid-feedback"
+                            v-if="errors && errors.password"
+                            >{{ errors.password[0] }}</span
+                        >
                     </div>
                     <div class="row">
                         <div class="col-8">
@@ -84,7 +105,9 @@ const handleSubmit = () => {
                                     class="spinner-border spinner-border-sm"
                                     role="status"
                                 >
-                                    <span class="sr-only">loading_spinner...</span>
+                                    <span class="sr-only"
+                                        >loading_spinner...</span
+                                    >
                                 </div>
                                 <span v-else> Sign In </span>
                             </button>

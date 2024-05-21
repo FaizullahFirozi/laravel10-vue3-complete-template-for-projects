@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <!--if you want to change te Language to English change dir="ltr" -->
 <html lang="en" dir="rtl">
+{{-- <html lang="en" dir="ltr"> --}}
 
 <head>
     <meta charset="utf-8">
@@ -24,7 +25,7 @@
 
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    {{-- @vite(['resources/css/app_rtl.css', 'resources/js/app.js']) --}}
+    {{-- @vite(['resources/css/app_ltr.css', 'resources/js/app.js']) --}}
 
 </head>
 

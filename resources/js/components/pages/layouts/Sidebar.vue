@@ -62,7 +62,7 @@
             </li>
             <li class="nav-item">
                 <router-link
-                    to="/admin/crudTest"
+                    to="/admin/CRUD-Test"
                     active-class="active"
                     class="nav-link"
                     ><i class="nav-icon fa fa-syringe"></i>
@@ -72,11 +72,29 @@
             
             <li class="nav-item">
                 <router-link
+                    to="/admin/users"
+                    active-class="active"
+                    class="nav-link"
+                    ><i class="nav-icon fa fa-user"></i>
+                    <p>Users</p>
+                </router-link>
+            </li>
+            <li class="nav-item">
+                <router-link
                     to="/admin/profile"
                     active-class="active"
                     class="nav-link"
                     ><i class="nav-icon fa fa-user"></i>
                     <p>Profile</p>
+                </router-link>
+            </li>
+            <li class="nav-item">
+                <router-link
+                    to="/admin/activity-log"
+                    active-class="active"
+                    class="nav-link"
+                    ><i class="nav-icon fa fa-book"></i>
+                    <p>Activity Log</p>
                 </router-link>
             </li>
 
