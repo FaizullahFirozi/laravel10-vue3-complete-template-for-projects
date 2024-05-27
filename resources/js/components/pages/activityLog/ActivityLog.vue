@@ -15,7 +15,6 @@ onMounted(() => {
     fetchActivityLog();
 });
 
-
 // CREATED BY FRZ FOR ONLY SHOW 10 CARACTAR DATA
 function formatDate(dateString) {
     return dateString.slice(0, 10);
@@ -27,7 +26,12 @@ function formatDate(dateString) {
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-            <span class=" badge badge-pill text-md badge-warning">ټول لاګونه: <span class=" badge badge-pill text-md badge-success">{{ activity_logs.length }}</span></span>
+                    <span class="badge badge-pill text-md badge-warning"
+                        >ټول لاګونه:
+                        <span class="badge badge-pill text-md badge-success">{{
+                            activity_logs.length
+                        }}</span></span
+                    >
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-left">
@@ -47,65 +51,93 @@ function formatDate(dateString) {
         <div class="container-fluid">
             <div class="card">
                 <div class="card-body">
+
                     <table
                         class="table table-borderless table-bordered table-responsive-sm table-responsive-md table-responsive-lg"
                     >
+s
                         <thead class="bg-secondary">
                             <tr>
                                 <th style="width: 10px">#</th>
-                                <th>Name</th>
+                                <th>User Name</th>
+                                <th>Changes Table</th>
                                 <th>Log Name</th>
                                 <th>DATE</th>
                                 <th class="text-left">New Data</th>
                                 <th class="text-left">Old Data</th>
                             </tr>
                         </thead>
-                        <tbody v-if="activity_logs.length > 0">
-                            <tr
-                                v-for="items in activity_logs"
-                                :key="items.id"
-                            >
-                                <td>{{ items.id }}</td>
-                                <td>{{ items.log_name }}</td>
-                                <td>{{ items.description }}</td>
-                                <td>{{ formatDate(items.updated_at) }}</td>
+    <transition name="slide-down-fade">
 
-                                <td
-                                    dir="ltr"
-                                    class="text-left text-xs border"
-                                    style="max-width: 350px"
+                            <tbody v-if="activity_logs.length > 0">
+                                <tr
+                                    v-for="items in activity_logs"
+                                    :key="items.id"
                                 >
-                                    <div class="border">
-                                        <span class="badge badge-success"
-                                            >New Data:</span
-                                        >
-                                        {{ items.properties.attributes }}
-                                    </div>
-                                </td>
-                                <td
-                                    dir="ltr"
-                                    class="text-left text-xs border"
-                                    style="max-width: 350px"
-                                >
-                                    <div class="border">
-                                        <span class="badge badge-danger"
-                                            >Old Data:</span
-                                        >
-                                        {{ items.properties.old }}
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                        <tbody v-else>
-                            <tr>
-                                <td colspan="13" align="center">
-                                    مهربانی وکړئ لږ انتظار شئ...
-                                </td>
-                            </tr>
-                        </tbody>
+                                    <td>{{ items.id }}</td>
+                                    <td>{{ items.causer_id }}</td>
+                                    <td>{{ items.log_name }}</td>
+                                    <td>{{ items.description }}</td>
+                                    <td>{{ formatDate(items.updated_at) }}</td>
+
+                                    <td
+                                        dir="ltr"
+                                        class="text-left text-xs border"
+                                        style="max-width: 350px"
+                                    >
+                                        <div class="border">
+                                            <span class="badge badge-success"
+                                                >New Data:</span
+                                            >
+                                            {{ items.properties.attributes }}
+                                        </div>
+                                    </td>
+                                    <td
+                                        dir="ltr"
+                                        class="text-left text-xs border"
+                                        style="max-width: 350px"
+                                    >
+                                        <div class="border">
+                                            <span class="badge badge-danger"
+                                                >Old Data:</span
+                                            >
+                                            {{ items.properties.old }}
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody v-else>
+                                <tr>
+                                    <td colspan="13" align="center">
+                                        مهربانی وکړئ لږ انتظار شئ...
+                                    </td>
+                                </tr>
+                            </tbody>
+                </transition>
+
                     </table>
+
                 </div>
             </div>
         </div>
     </div>
 </template>
+<style>
+/* .v-enter-from{
+        opacity: 0;
+    }
+    .v-enter-to{
+        opacity: 1;
+    }
+    .v-enter-active{
+        transition: opacity 1s ease;
+    } */
+
+.slide-down-fade-enter-from {
+    opacity: 0;
+    transform: translateY(-30px);
+}
+.slide-down-fade-enter-active {
+    transition: all 1s ease;
+}
+</style>

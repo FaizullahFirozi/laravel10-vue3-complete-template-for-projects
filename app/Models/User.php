@@ -13,6 +13,8 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Http\Request;
+
 
 // ADD FOR VUE SECTION PERMISSION
 use LaravelAndVueJS\Traits\LaravelPermissionToVueJS;
@@ -20,14 +22,28 @@ use LaravelAndVueJS\Traits\LaravelPermissionToVueJS;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles, LogsActivity, LaravelPermissionToVueJS;
-
+   
+  
      // this method for LogsActivity only; **********
      public function getActivitylogOptions(): LogOptions
      {
+        
          return LogOptions::defaults()
              ->useLogName('کارمندان')
-             ->logOnly(['*'])->logOnlyDirty(); // Replace with the desired attributes to be logged
+             ->logOnly([ 'name',
+             'last_name',
+             'father_name',
+             'dob',
+             'nic',
+             'hire_date',
+             'gross_salary',
+             'phone',
+             'photo',
+             'account_status',
+             'email',
+             'password',])->logOnlyDirty(); // Replace with the desired attributes to be logged
      }
+
 
     /**
      * The attributes that are mass assignable.

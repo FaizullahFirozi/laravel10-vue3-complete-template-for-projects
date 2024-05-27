@@ -10,4 +10,6 @@ class ApplicationController extends Controller
     {
         return view('admin.layouts.app');
     }
+    
+
 }

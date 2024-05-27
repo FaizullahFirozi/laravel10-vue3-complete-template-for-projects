@@ -23,7 +23,8 @@ import Login from './components/pages/auth/Login.vue';
 
 
 // FOR GENERAL SECTION
-import { createApp } from 'vue/dist/vue.esm-bundler.js';
+import { createApp } from 'vue';
+// import { createApp } from 'vue/dist/vue.esm-bundler.js'; // IF NOT WORK UNCOMMENT THIS
 import { createRouter, createWebHistory } from 'vue-router';
 import Routes from './routes.js';
 

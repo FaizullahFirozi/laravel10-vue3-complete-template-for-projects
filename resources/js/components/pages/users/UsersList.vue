@@ -1,14 +1,18 @@
 <script setup>
 import axios from "axios";
-import { ref, onMounted, reactive } from "vue";
+import { ref, onMounted, reactive, watch } from "vue";
 import { Form, Field } from "vee-validate";
 import * as yup from "yup";
 
 import { useToastr } from "@/toastr";
 import Swal from "sweetalert2";
 
+// ADDED FOR SEARCH TO NOT SEND REAQUES IN EVERY BUTTON ENTERD
+import { debounce } from "lodash";
+import { Bootstrap4Pagination } from "laravel-vue-pagination";
+
 const toastr = useToastr();
-const users = ref([]);
+const users = ref({ data: [] });
 const editing = ref(false);
 const form = ref(null);
 
@@ -18,10 +22,12 @@ const loading_spinner_submit = ref(false);
 const userIdBeingDeleted = ref(null);
 
 // GETTING DATA FROM DATABASE
-const getUsers = () => {
-    axios.get("/api/users").then((response) => {
-        users.value = response.data;
-    });
+const getUsers = (page = 1, per_Page = perPage.value) => {
+    axios
+        .get(`/api/users?page=${page}&per_page=${per_Page}`)
+        .then((response) => {
+            users.value = response.data;
+        });
 };
 
 // FRONTEND FORM VALIDATION FOR NEW ADD
@@ -73,7 +79,7 @@ const createUser = (values, { resetForm, setFieldError }) => {
             });
 
             $("#userFormModal").modal("hide");
-            users.value.unshift(response.data);
+            users.value.data.unshift(response.data);
             resetForm();
             toastr.success("Added Successfull", "Success");
         })
@@ -98,10 +104,10 @@ const updateUser = (values, { setFieldError }) => {
     axios
         .put("/api/users/" + values.id, values)
         .then((response) => {
-            const index = users.value.findIndex(
+            const index = users.value.data.findIndex(
                 (user) => user.id === response.data.id
             );
-            users.value[index] = response.data;
+            users.value.data[index] = response.data;
             $("#userFormModal").modal("hide");
             toastr.info("د کارمند معلومات تعغیر شول", "مبارک شه");
             // toastr.success(response.data.message, response.data.title);
@@ -170,10 +176,11 @@ const confirmUserDeletion = (user) => {
 const deleteUser = () => {
     axios.delete(`/api/users/${userIdBeingDeleted.value}`).then(() => {
         $("#deleteUserModal").modal("hide");
-        users.value = users.value.filter(
+        users.value.data = users.value.data.filter(
             (user) => user.id !== userIdBeingDeleted.value
         );
         toastr.success("User Deleted Successfully", "حذف");
+        // getUsers(); // FOR TOTAL COUNT AGAIN
     });
 };
 
@@ -187,28 +194,62 @@ const confirmUserDeletion1 = (id) => {
         cancelButtonColor: "#d33",
         confirmButtonText: "هو Yes",
         cancelButtonText: "نه No",
-    })
-        .then((result) => {
-            if (result.isConfirmed) {
-                axios.delete(`/api/users/${id}`).then((response) => {
-                    users.value = users.value.filter((user) => user.id !== id);
-                    // Swal.fire({
-                    //     title: "حذف شو!",
-                    //     text: "ستاسو کارمند حذف شو!",
-                    //     icon: "success",
-                    // });
-                    Swal.fire({
-                        position: "top-end",
-                        icon: "success",
-                        title: "حذف شو!",
-                        // text: "ستاسو کارمند حذف شو!",
-                        showConfirmButton: false,
-                        timer: 1200,
-                    });
+    }).then((result) => {
+        if (result.isConfirmed) {
+            axios.delete(`/api/users/${id}`).then((response) => {
+                users.value.data = users.value.data.filter(
+                    (user) => user.id !== id
+                );
+                getUsers(); // FOR TOTAL COUNT AGAIN
+
+                // Swal.fire({
+                //     title: "حذف شو!",
+                //     text: "ستاسو کارمند حذف شو!",
+                //     icon: "success",
+                // });
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "حذف شو!",
+                    // text: "ستاسو کارمند حذف شو!",
+                    showConfirmButton: false,
+                    timer: 1200,
                 });
-            }
+            });
+        }
+    });
+};
+
+// FOR SEARCH
+const searchQuery = ref(null);
+const perPage = ref(5);
+
+const search = () => {
+    axios
+        .get("/api/users/search", {
+            params: {
+                query: searchQuery.value,
+                per_page: perPage.value,
+            },
+        })
+        .then((response) => {
+            users.value = response.data;
+        })
+        .catch((error) => {
+            console.log(error);
         });
 };
+
+watch(
+    searchQuery,
+    debounce(() => {
+        search();
+    }, 500)
+);
+
+watch(perPage, () => {
+    search();
+});
 
 onMounted(() => {
     getUsers();
@@ -238,33 +279,73 @@ onMounted(() => {
 
     <div class="content">
         <div class="container-fluid">
-            <button
-                @click="addUser"
-                type="button"
-                class="mb-2 btn btn-primary"
-                :disabled="loading_spinner"
-                v-if="is('Super Admin')"
-            >
-                <div
-                    v-if="loading_spinner"
-                    class="spinner-border spinner-border-sm"
-                    role="status"
-                >
-                    <span class="sr-only">loading_spinner...</span>
-                </div>
-
-                <span v-else
-                    ><i class="fa fa-plus-circle mr-1"></i> Add New User
-                </span>
-            </button>
-            <span class="float-left badge badge-pill badge-default">
-                ټول کارمندان: {{ users.length }}</span
-            >
             <div class="card">
-                <div class="card-body">
-                    <table
-                        class="table table-borderless table-bordered table-responsive-sm table-responsive-md table-responsive-lg"
+                <div class="card-header bg-dafault pt-4">
+                    <button
+                        @click="addUser"
+                        type="button"
+                        class="mb-2 btn btn-primary"
+                        :disabled="loading_spinner"
+                        v-if="is('Super Admin')"
                     >
+                        <div
+                            v-if="loading_spinner"
+                            class="spinner-border spinner-border-sm"
+                            role="status"
+                        >
+                            <span class="sr-only">loading_spinner...</span>
+                        </div>
+
+                        <span v-else
+                            ><i class="fa fa-plus-circle mr-1"></i> Add New User
+                        </span>
+                    </button>
+                    <h3 class="card-title float-left">د کارکوونکو لیست</h3>
+                </div>
+                <div class="card-body">
+                    <span class="float-left badge badge-pill badge-default">
+                        ټول کارمندان <br /><br /><span class="text-success">
+                            {{ users.total }}</span
+                        ></span
+                    >
+                    Showing {{ users.from }} to {{ users.to }} of
+                    {{ users.total }} entries
+                    <select
+                        v-model="perPage"
+                        dir="ltr"
+                        class="form-control form-control-sm float-left"
+                        style="max-width: 65px"
+                    >
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="1000000">All</option>
+                    </select>
+
+                    <div
+                        class="input-group input-group-md pb-3"
+                        style="width: 200px"
+                    >
+                        <input
+                            type="text"
+                            v-model="searchQuery"
+                            class="form-control text-center float-right"
+                            placeholder="لټون ..."
+                        />
+
+                        <div class="input-group-append">
+                            <button class="btn btn-default">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- <br /> -->
+
+                    <!-- <table class="table table-borderless table-bordered table-responsive-sm table-responsive-md table-responsive-lg"> -->
+                    <table class="table">
                         <thead class="bg-secondary">
                             <tr>
                                 <th style="width: 10px">#</th>
@@ -282,8 +363,11 @@ onMounted(() => {
                                 <th>Options</th>
                             </tr>
                         </thead>
-                        <tbody v-if="users.length > 0">
-                            <tr v-for="(user, index) in users" :key="user.id">
+                        <tbody v-if="users.data.length > 0">
+                            <tr
+                                v-for="(user, index) in users.data"
+                                :key="user.id"
+                            >
                                 <td>{{ index + 1 }}</td>
                                 <td>{{ user.name }}</td>
                                 <td>{{ user.last_name }}</td>
@@ -296,9 +380,9 @@ onMounted(() => {
                                 <td>{{ user.photo }}</td>
                                 <td>{{ user.account_status }}</td>
                                 <td>{{ user.email }}</td>
-                                <td>
+                                <!-- <td>
                                     <a href="#" @click.prevent="editUser(user)"
-                                        ><i class="fa fa-edit"></i
+                                        ><i class="fa fa-edit text-success"></i
                                     ></a>
                                     <a
                                         href="#"
@@ -318,18 +402,94 @@ onMounted(() => {
                                             class="fa fa-trash text-warning ml-3"
                                         ></i
                                     ></a>
+                                </td> -->
+                                <td>
+                                    <div class="btn-group">
+                                        <button
+                                            type="button"
+                                            class="btn btn-dafault dropdown-toggle dropdown-hover dropdown-icon"
+                                            data-toggle="dropdown"
+                                            aria-expanded="false"
+                                        >
+                                            <span class="sr-only"
+                                                >Toggle Dropdown</span
+                                            >
+                                        </button>
+                                        <div
+                                            class="dropdown-menu"
+                                            role="menu"
+                                            style=""
+                                        >
+                                            <a
+                                                class="dropdown-item"
+                                                href="#"
+                                                @click.prevent="editUser(user)"
+                                                ><i
+                                                    class="fa fa-edit text-success"
+                                                ></i>
+                                                edit
+                                            </a>
+                                            <a
+                                                class="dropdown-item"
+                                                href="#"
+                                                @click.prevent="
+                                                    confirmUserDeletion(user)
+                                                "
+                                                ><i
+                                                    class="fa fa-trash text-danger ml-3"
+                                                ></i>
+                                                delete
+                                            </a>
+                                            <a
+                                                class="dropdown-item"
+                                                href="#"
+                                                @click.prevent="
+                                                    confirmUserDeletion1(
+                                                        user.id
+                                                    )
+                                                "
+                                                ><i
+                                                    class="fa fa-trash text-warning ml-3"
+                                                ></i>
+                                                delete
+                                            </a>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
                         <tbody v-else>
                             <tr>
                                 <td colspan="13" align="center">
-                                    مهربانی وکړئ لږ انتظار شئ...
+                                    معلومات پيدا نشول..!
                                 </td>
                             </tr>
                         </tbody>
+                        <tfoot class="bg-secondary">
+                            <tr>
+                                <th style="width: 10px">#</th>
+                                <th>Name</th>
+                                <th>Last Name</th>
+                                <th>Father Name</th>
+                                <th>DOB</th>
+                                <th>NIC</th>
+                                <th>Hire Date</th>
+                                <th>Salary</th>
+                                <th>phone</th>
+                                <th>Image</th>
+                                <th>Account</th>
+                                <th>Email</th>
+                                <th>Options</th>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
+
+                <Bootstrap4Pagination
+                    :data="users"
+                    @pagination-change-page="getUsers"
+                    class="pl-4"
+                />
             </div>
         </div>
     </div>

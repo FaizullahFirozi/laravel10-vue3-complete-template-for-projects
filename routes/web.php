@@ -21,7 +21,10 @@ use Spatie\Activitylog\Models\Activity;
 
 Route::get('csrf', function () {
     return csrf_token();
+    
 });
+
+Route::get('/ip', [UserController::class, 'showIpAddress']); //show ip and mac
 
 
 Route::get('/test', function () {
@@ -43,6 +46,7 @@ Route::middleware('auth')->group(function () {
 
     // USER ROUTE SECTION
     Route::get('/api/users', [UserController::class, 'index']);
+    Route::get('/api/users/search', [UserController::class, 'search']);
     Route::post('/api/users', [UserController::class, 'store']);
     Route::put('/api/users/{user}', [UserController::class, 'update']);
     Route::delete('/api/users/{user}', [UserController::class, 'destroy']);

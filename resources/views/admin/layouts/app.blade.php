@@ -18,7 +18,7 @@
     <script type="text/javascript">
         window.Laravel = {
             csrfToken: "{{ csrf_token() }}",
-            jsPermissions: {!! auth()->check()?auth()->user()->jsPermissions():0 !!}
+            jsPermissions: {!! auth()->check() ? auth()->user()->jsPermissions() : 0 !!}
         }
     </script>
     {{-- END pass permissions from Laravel To Vuejs, --}}
@@ -26,6 +26,7 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     {{-- @vite(['resources/css/app_ltr.css', 'resources/js/app.js']) --}}
+
 
 </head>
 
@@ -36,26 +37,28 @@
         {{-- name="spinning"  --}}
         {{-- name="dots"  --}}
         {{-- name="circular"  --}}
-        <loader_vue id="loader_vue_show" name="loading" loadingText="youuuuu..." textColor="#ffffff" textSize="15"
-            textWeight="800" object="#ff9633" color1="#ffffff" color2="#17fd3d" size="5" speed="2"
-            bg="#343a40" objectbg="#999793" opacity="80" :disableScrolling="false"></loader_vue>
+        {{-- name="box"  --}}
+        <loader_vue id="loader_vue_show" name="box" loadingText="youuuuu..." textColor="#ffffff" textSize="5"
+            textWeight="800" object="#ff9633" color1="#ffffff" color2="#17fd3d" size="5" speed="1"
+            bg="#343a40" objectbg="#999793" opacity="90" :disableScrolling="false"></loader_vue>
+
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand navbar-light">
 
             {{-- NAVBAR SECTION FROM VUE --}}
             <navbar_vue></navbar_vue>
             {{-- NAVBAR SECTION FROM VUE --}}
-            @can('user')  
-               <span class="text-warning"> User can see</span>
-               @endcan
-            @can('admin')  
-               <span class="text-primary"> Admin can see</span>
+            @can('user')
+                <span class="text-warning"> User can see</span>
             @endcan
-            @can('super-admin')  
-               <span class="text-danger"> Super Admin can see</span>
+            @can('admin')
+                <span class="text-primary"> Admin can see</span>
+            @endcan
+            @can('super-admin')
+                <span class="text-danger"> Super Admin can see</span>
             @endcan
 
-            
+
         </nav>
         <!-- /.navbar -->
 
@@ -78,7 +81,8 @@
                 <li class="nav-item">
                     <form method="POST" action="{{ route('logout') }}" class="nav-link">
                         @csrf
-                        <a href="#" onclick="event.preventDefault(); this.closest('form').submit();" class="nav-link">
+                        <a href="#" onclick="event.preventDefault(); this.closest('form').submit();"
+                            class="nav-link">
                             <i class="nav-icon fas fa-sign-out-alt"></i>
                             <p>
                                 Logout
@@ -95,7 +99,7 @@
         <div class="content-wrapper">
 
             {{-- COME HRERE FROME VUE FILE ALL CONTETNS --}}
-            <router-view></router-view>
+                <router-view />
             {{-- COME HRERE FROME VUE FILE ALL CONTETNS --}}
 
 

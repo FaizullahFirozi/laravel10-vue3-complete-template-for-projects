@@ -10,7 +10,7 @@ class ActivityLogController extends Controller
 {
   public function index()
   {
-    return Activity::latest()->get();
+    return Activity::latest()->limit(6)->get();
     // return Activity::orderBy('id', 'desc')->get(); // BOTH ARE SAME
   }
 }

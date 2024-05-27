@@ -155,7 +155,7 @@ onMounted(() => {
                                         profilePictureUrl
                                             ? profilePictureUrl
                                             : '/logo.png'
-                                    "
+                                        "
                                     alt="User profile picture"
                                 />
                             </div>

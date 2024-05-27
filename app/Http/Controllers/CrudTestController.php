@@ -14,6 +14,21 @@ class CrudTestController extends Controller
     {
         $crud_data = CrudTest::all();
         return response()->json($crud_data);
+
+        
+        // $perPage = request('per_page', 10);
+        // $search = request('search', '');
+        // $sortField = request('sort_field', 'updated_at');
+        // $sortDirection = request('sort_direction', 'desc');
+
+        // $users = CrudTest::query()
+        // ->where('name', 'like', "%{$search}%")
+        // ->orderBy($sortField, $sortDirection)
+        // ->paginate($perPage);
+
+        // return $users;
+
+
     }
 
     /**

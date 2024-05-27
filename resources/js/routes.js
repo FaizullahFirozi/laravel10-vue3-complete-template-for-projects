@@ -1,9 +1,20 @@
 // import Dashboard from './components/Dashboard.vue'; //this is bad way when load page all will be loaded.
 // import Dashboard2 from './components/Dashboard2.vue';
 
+ 
+
 
 export default [
-   
+    {
+        path: '/', //THIS IS FOR TEST
+        redirect: '/admin/dashboard',
+    },
+    {
+        path: '/:pashMatch(.*)',
+        name: 'notfound',
+        component: () => import('./components/pages/notFoundPage/NotFoundPage.vue'),
+        // redirect: '/admin/dashboard',   //BUT IT HAS PROBLEM IF TYPE INCURRECT YOU RETURN TO HERER.
+    },
     {
         path: '/login',
         name: 'admin.login',
