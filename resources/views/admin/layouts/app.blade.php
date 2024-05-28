@@ -74,6 +74,15 @@
             <!-- Sidebar -->
             <div class="sidebar">
 
+                <!-- Sidebar user panel (optional) -->
+                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                    <div class="image">
+                        <img src="{{ auth()->user()->avatar }}" class="img-circle elevation-2" alt="Image" />
+                    </div>
+                    <div class="info">
+                        <a href="#" class="d-block"> {{ auth()->user()->last_name }}</a>
+                    </div>
+                </div>
                 {{-- SIDEBAR SECTION FROM VUE --}}
                 <sidebar_vue></sidebar_vue>
                 {{-- SIDEBAR SECTION FROM VUE --}}
@@ -99,7 +108,7 @@
         <div class="content-wrapper">
 
             {{-- COME HRERE FROME VUE FILE ALL CONTETNS --}}
-                <router-view />
+            <router-view />
             {{-- COME HRERE FROME VUE FILE ALL CONTETNS --}}
 
 

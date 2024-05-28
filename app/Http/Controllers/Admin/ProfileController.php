@@ -34,12 +34,17 @@ class ProfileController extends Controller
 
     public function uploadImage(Request $request)
     {
-       if($request->hasFile('profile_picture')){
-        $link = Storage::put('/photos', $request->file('profile_picture'));
+       if($request->hasFile('profile_picture')){ 
+
+        $previousPath = $request->user()->getRawOriginal('avatar');
+        
+        $link = Storage::put('/users_avatar', $request->file('profile_picture'));
 
         $request->user()->update(['avatar' =>  $link]);
 
-        // return response()->json(['message' => 'Profile Picture Uploaded Successfully1']);
+        Storage::delete($previousPath);
+
+        // return response()->json(['message' => 'Profile hahahah Picture Uploaded Successfully1']);
        }
     }
 

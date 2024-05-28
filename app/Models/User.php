@@ -60,6 +60,7 @@ class User extends Authenticatable
         'gross_salary',
         'phone',
         'photo',
+        'avatar',
         'account_status',
         'email',
         'password',
@@ -88,9 +89,11 @@ class User extends Authenticatable
     ];
 
 
+    // FRZ FOR ADDING THE PHOTO LINK ADDRESS
     public function avatar(): Attribute {
          return Attribute::make(
             get: fn ($value) => asset(Storage::url($value) ?? 'logo.png'),
          );
     }
+  
 }

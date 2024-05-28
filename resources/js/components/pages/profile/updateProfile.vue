@@ -58,9 +58,9 @@ const updateProfile = () => {
 
 //START UPDATE PASSWORD SECTION
 const changePasswordForm = reactive({
-    currentPassword: '',
-    password: '',
-    passwordConfirmatiton: '',
+    currentPassword: "",
+    password: "",
+    passwordConfirmatiton: "",
 });
 
 const handleChangePassword = () => {
@@ -83,7 +83,6 @@ const handleChangePassword = () => {
 };
 //END UPDATE PASSWORD SECTION
 
-
 // THIS SECTION IS FOR UPLADING PICTURE OR IMAGE
 const fileInput = ref(null);
 const openFileInput = () => {
@@ -93,15 +92,24 @@ const openFileInput = () => {
 const profilePictureUrl = ref(null);
 
 const handleFileChange = (event) => {
+   
     const file = event.target.files[0];
-    profilePictureUrl.value = URL.createObjectURL(file);
 
-    const formData = new FormData();
-    formData.append("profile_picture", file);
+    const maxSizeInMB = 2; 
+    const maxSizeInBytes = maxSizeInMB * 1024 * 1024; // Convert MB to Bytes
+    if (file.size > maxSizeInBytes) {
+        toastr.error(`د عکس اندازه باید له ${maxSizeInMB} MB څخه کم وی`, "د عکس مشکل");
 
-    axios.post("/api/upload-profile-image", formData).then((response) => {
-        toastr.success("عکس په بریالی توګه اضافه شو", "اضافه شو");
-    });
+    } else {
+        profilePictureUrl.value = URL.createObjectURL(file);
+
+        const formData = new FormData();
+        formData.append("profile_picture", file);
+
+        axios.post("/api/upload-profile-image", formData).then((response) => {
+            toastr.success("عکس په بریالی توګه اضافه شو", "اضافه شو");
+        });
+    }
 };
 
 onMounted(() => {
@@ -147,6 +155,7 @@ onMounted(() => {
                                     ref="fileInput"
                                     type="file"
                                     class="d-none"
+                                    accept="image/*"
                                 />
                                 <img
                                     @click="openFileInput"
@@ -154,8 +163,8 @@ onMounted(() => {
                                     :src="
                                         profilePictureUrl
                                             ? profilePictureUrl
-                                            : '/logo.png'
-                                        "
+                                            : form.avatar
+                                    "
                                     alt="User profile picture"
                                 />
                             </div>
@@ -305,15 +314,21 @@ onMounted(() => {
                                                     placeholder="Current Password"
                                                     :class="{
                                                         'is-invalid':
-                                                            errors.current_password
+                                                            errors.current_password,
                                                     }"
                                                     required
                                                     autocomplete
                                                 />
                                                 <span
                                                     class="invalid-feedback"
-                                                    v-if="errors && errors.current_password"
-                                                    >{{ errors.current_password[0] }}</span
+                                                    v-if="
+                                                        errors &&
+                                                        errors.current_password
+                                                    "
+                                                    >{{
+                                                        errors
+                                                            .current_password[0]
+                                                    }}</span
                                                 >
                                             </div>
                                         </div>
@@ -332,15 +347,20 @@ onMounted(() => {
                                                     placeholder="New Password"
                                                     :class="{
                                                         'is-invalid':
-                                                            errors.password
+                                                            errors.password,
                                                     }"
-                                                    required
+                                                    required 
                                                     autocomplete
                                                 />
                                                 <span
                                                     class="invalid-feedback"
-                                                    v-if="errors && errors.password"
-                                                    >{{ errors.password[0] }}</span
+                                                    v-if="
+                                                        errors &&
+                                                        errors.password
+                                                    "
+                                                    >{{
+                                                        errors.password[0]
+                                                    }}</span
                                                 >
                                             </div>
                                         </div>
@@ -359,15 +379,20 @@ onMounted(() => {
                                                     placeholder="Confirm New Password"
                                                     :class="{
                                                         'is-invalid':
-                                                            errors.password
+                                                            errors.password,
                                                     }"
                                                     required
                                                     autocomplete
                                                 />
                                                 <span
                                                     class="invalid-feedback"
-                                                    v-if="errors && errors.password"
-                                                    >{{ errors.password[0] }}</span
+                                                    v-if="
+                                                        errors &&
+                                                        errors.password
+                                                    "
+                                                    >{{
+                                                        errors.password[0]
+                                                    }}</span
                                                 >
                                             </div>
                                         </div>
