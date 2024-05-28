@@ -61,6 +61,7 @@ Route::middleware('auth')->group(function () {
 
     // ACTIVITY LOG
     Route::get('/api/activity_log', [ActivityLogController::class, 'index']);
+    Route::get('/api/activity_log/search', [ActivityLogController::class, 'search']);
 
 
     // FOR CHANGE PASSWORD

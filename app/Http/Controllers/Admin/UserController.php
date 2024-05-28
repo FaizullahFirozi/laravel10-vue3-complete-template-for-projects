@@ -11,13 +11,13 @@ class UserController extends Controller
 {
 
 
-    public function showIpAddress(Request $request)
-    {
-        //ONLY FOR SHOWING IP AND MAC ADDRESS
-        $ipAddress = $request->ip();
-        $macAddress = exec('getmac');
-        return "IP Address: " . $ipAddress . "Mac Address: " . $macAddress;
-    }
+    // public function showIpAddress(Request $request)
+    // {
+    //     //ONLY FOR SHOWING IP AND MAC ADDRESS
+    //     $ipAddress = $request->ip();
+    //     $macAddress = exec('getmac');
+    //     return "IP Address: " . $ipAddress . "Mac Address: " . $macAddress;
+    // }
 
     /**
      * Display a listing of the resource.
@@ -29,9 +29,8 @@ class UserController extends Controller
         // $users = User::latest()->get();
 
         $perPage = request('per_page');
-
-
         $users = User::latest()->paginate($perPage);
+
         return response()->json($users);
     }
 

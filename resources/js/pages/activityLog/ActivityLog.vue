@@ -1,15 +1,56 @@
 <script setup>
 import axios from "axios";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 
-const activity_logs = ref([]);
+
+// ADDED FOR SEARCH TO NOT SEND REAQUES IN EVERY BUTTON ENTERD
+import { debounce } from "lodash";
+import { Bootstrap4Pagination } from "laravel-vue-pagination";
+
+
+const activity_logs = ref({ data: []});
+
+
 
 // GETTING DATA FROM DATABASE
-const fetchActivityLog = () => {
-    axios.get("/api/activity_log").then((response) => {
+const fetchActivityLog = (page = 1, per_Page = perPage.value) => {
+    axios.get(`/api/activity_log?page=${page}&per_page=${per_Page}`).then((response) => {
         activity_logs.value = response.data;
+
     });
 };
+
+
+// FOR SEARCH
+const searchQuery = ref(null);
+const perPage = ref(5);
+
+const search = () => {
+    axios
+        .get("/api/activity_log/search", {
+            params: {
+                query: searchQuery.value,
+                per_page: perPage.value,
+            },
+        })
+        .then((response) => {
+            activity_logs.value = response.data;
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+};
+
+watch(
+    searchQuery,
+    debounce(() => {
+        search();
+    }, 500)
+);
+
+watch(perPage, () => {
+    search();
+});
 
 onMounted(() => {
     fetchActivityLog();
@@ -28,9 +69,7 @@ function formatDate(dateString) {
                 <div class="col-sm-6">
                     <span class="badge badge-pill text-md badge-warning"
                         >ټول لاګونه:
-                        <span class="badge badge-pill text-md badge-success">{{
-                            activity_logs.length
-                        }}</span></span
+                        <span class="badge badge-pill text-md badge-success">{{ activity_logs.total }}</span></span
                     >
                 </div>
                 <div class="col-sm-6">
@@ -52,10 +91,41 @@ function formatDate(dateString) {
             <div class="card">
                 <div class="card-body">
 
+                    <select
+                        v-model="perPage"
+                        dir="ltr"
+                        class="form-control form-control-sm float-left mr-3"
+                        style="max-width: 65px"
+                    >
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="1000000">All</option>
+                    </select>
+
+                    <div
+                        class="input-group input-group-md pb-3"
+                        style="width: 200px"
+                    >
+                        <input
+                            type="text"
+                            v-model="searchQuery"
+                            class="form-control text-center float-right"
+                            placeholder="لټون ..."
+                        />
+
+                        <div class="input-group-append">
+                            <button class="btn btn-default">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
                     <table
                         class="table table-borderless table-bordered table-responsive-sm table-responsive-md table-responsive-lg"
                     >
-s
+                        
                         <thead class="bg-secondary">
                             <tr>
                                 <th style="width: 10px">#</th>
@@ -67,18 +137,17 @@ s
                                 <th class="text-left">Old Data</th>
                             </tr>
                         </thead>
-    <transition name="slide-down-fade">
-
-                            <tbody v-if="activity_logs.length > 0">
+                        <transition name="slide-down-fade-frz">
+                            <tbody v-if="activity_logs.data.length > 0">
                                 <tr
-                                    v-for="items in activity_logs"
-                                    :key="items.id"
+                                    v-for="item in activity_logs.data"
+                                    :key="item.id"
                                 >
-                                    <td>{{ items.id }}</td>
-                                    <td>{{ items.causer_id }}</td>
-                                    <td>{{ items.log_name }}</td>
-                                    <td>{{ items.description }}</td>
-                                    <td>{{ formatDate(items.updated_at) }}</td>
+                                    <td>{{ item.id }}</td>
+                                    <td>{{ item.causer_id }}</td>
+                                    <td>{{ item.log_name }}</td>
+                                    <td>{{ item.description }}</td>
+                                    <td>{{ formatDate(item.updated_at) }}</td>
 
                                     <td
                                         dir="ltr"
@@ -89,7 +158,7 @@ s
                                             <span class="badge badge-success"
                                                 >New Data:</span
                                             >
-                                            {{ items.properties.attributes }}
+                                            {{ item.properties.attributes }}
                                         </div>
                                     </td>
                                     <td
@@ -101,7 +170,7 @@ s
                                             <span class="badge badge-danger"
                                                 >Old Data:</span
                                             >
-                                            {{ items.properties.old }}
+                                            {{ item.properties.old }}
                                         </div>
                                     </td>
                                 </tr>
@@ -113,10 +182,23 @@ s
                                     </td>
                                 </tr>
                             </tbody>
-                </transition>
-
+                        </transition>
                     </table>
-
+                </div>
+                <div>
+                    <div class="float-left pr-5 pt-2">
+                        Showing {{ activity_logs.from }} to {{ activity_logs.to }} of
+                        {{ activity_logs.total }} entries
+                    </div>
+                    <Bootstrap4Pagination
+                        size="default"
+                        :show-disabled="true"
+                        :limit="2"
+                        :keepLength="true"
+                        :data="activity_logs"
+                        @pagination-change-page="fetchActivityLog"
+                        class="pl-5"
+                    />
                 </div>
             </div>
         </div>
@@ -133,11 +215,11 @@ s
         transition: opacity 1s ease;
     } */
 
-.slide-down-fade-enter-from {
+.slide-down-fade-frz-enter-from {
     opacity: 0;
     transform: translateY(-30px);
 }
-.slide-down-fade-enter-active {
+.slide-down-fade-frz-enter-active {
     transition: all 1s ease;
 }
 </style>

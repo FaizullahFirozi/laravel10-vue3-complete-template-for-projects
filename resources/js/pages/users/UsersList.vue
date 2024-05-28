@@ -4,7 +4,7 @@ import { ref, onMounted, reactive, watch } from "vue";
 import { Form, Field } from "vee-validate";
 import * as yup from "yup";
 
-import { useToastr } from "@/toastr";
+import { useToastr } from "@/components/toastr";
 import Swal from "sweetalert2";
 
 // ADDED FOR SEARCH TO NOT SEND REAQUES IN EVERY BUTTON ENTERD
@@ -168,23 +168,7 @@ const handleSubmit = (values, actions) => {
     }
 };
 
-const confirmUserDeletion = (user) => {
-    userIdBeingDeleted.value = user.id;
-    $("#deleteUserModal").modal("show");
-};
-
-const deleteUser = () => {
-    axios.delete(`/api/users/${userIdBeingDeleted.value}`).then(() => {
-        $("#deleteUserModal").modal("hide");
-        users.value.data = users.value.data.filter(
-            (user) => user.id !== userIdBeingDeleted.value
-        );
-        toastr.success("User Deleted Successfully", "حذف");
-        // getUsers(); // FOR TOTAL COUNT AGAIN
-    });
-};
-
-const confirmUserDeletion1 = (id) => {
+const confirmUserDeletion = (id) => {
     Swal.fire({
         title: "آیا مطمئن یی؟",
         text: "دایم لپاره ډیلیټ کیږی",
@@ -200,7 +184,7 @@ const confirmUserDeletion1 = (id) => {
                 users.value.data = users.value.data.filter(
                     (user) => user.id !== id
                 );
-                getUsers(); // FOR TOTAL COUNT AGAIN
+                // getUsers(); // FOR TOTAL COUNT AGAIN
 
                 // Swal.fire({
                 //     title: "حذف شو!",
@@ -308,8 +292,7 @@ onMounted(() => {
                             {{ users.total }}</span
                         ></span
                     >
-                    Showing {{ users.from }} to {{ users.to }} of
-                    {{ users.total }} entries
+
                     <select
                         v-model="perPage"
                         dir="ltr"
@@ -345,7 +328,9 @@ onMounted(() => {
                     <!-- <br /> -->
 
                     <!-- <table class="table table-borderless table-bordered table-responsive-sm table-responsive-md table-responsive-lg"> -->
-                    <table class="table">
+                    <table
+                        class="table table-hover table-responsive-sm table-responsive-md"
+                    >
                         <thead class="bg-secondary">
                             <tr>
                                 <th style="width: 10px">#</th>
@@ -363,108 +348,77 @@ onMounted(() => {
                                 <th>Options</th>
                             </tr>
                         </thead>
-                        <tbody v-if="users.data.length > 0">
-                            <tr
-                                v-for="(user, index) in users.data"
-                                :key="user.id"
-                            >
-                                <td>{{ index + 1 }}</td>
-                                <td>{{ user.name }}</td>
-                                <td>{{ user.last_name }}</td>
-                                <td>{{ user.father_name }}</td>
-                                <td>{{ user.dob }}</td>
-                                <td>{{ user.nic }}</td>
-                                <td>{{ user.hire_date }}</td>
-                                <td>{{ user.gross_salary }}</td>
-                                <td>{{ user.phone }}</td>
-                                <td>{{ user.photo }}</td>
-                                <td>{{ user.account_status }}</td>
-                                <td>{{ user.email }}</td>
-                                <!-- <td>
-                                    <a href="#" @click.prevent="editUser(user)"
-                                        ><i class="fa fa-edit text-success"></i
-                                    ></a>
-                                    <a
-                                        href="#"
-                                        @click.prevent="
-                                            confirmUserDeletion(user)
-                                        "
-                                        ><i
-                                            class="fa fa-trash text-danger ml-3"
-                                        ></i
-                                    ></a>
-                                    <a
-                                        href="#"
-                                        @click.prevent="
-                                            confirmUserDeletion1(user.id)
-                                        "
-                                        ><i
-                                            class="fa fa-trash text-warning ml-3"
-                                        ></i
-                                    ></a>
-                                </td> -->
-                                <td>
-                                    <div class="btn-group">
-                                        <button
-                                            type="button"
-                                            class="btn btn-dafault dropdown-toggle dropdown-hover dropdown-icon"
-                                            data-toggle="dropdown"
-                                            aria-expanded="false"
-                                        >
-                                            <span class="sr-only"
-                                                >Toggle Dropdown</span
+                        <transition name="slide-down-fade">
+                            <tbody v-if="users.data.length > 0">
+                                <tr
+                                    v-for="user in users.data" :key="user.id" >
+                                    <td>{{ user.id }}</td>
+                                    <td>{{ user.name }}</td>
+                                    <td>{{ user.last_name }}</td>
+                                    <td>{{ user.father_name }}</td>
+                                    <td>{{ user.dob }}</td>
+                                    <td>{{ user.nic }}</td>
+                                    <td>{{ user.hire_date }}</td>
+                                    <td>{{ user.gross_salary }}</td>
+                                    <td>{{ user.phone }}</td>
+                                    <td>{{ user.photo }}</td>
+                                    <td>{{ user.account_status }}</td>
+                                    <td>{{ user.email }}</td>
+                                    <td>
+                                        <div class="btn-group" dir="ltr">
+                                            <button
+                                                type="button"
+                                                class="btn btn-dafault text-danger dropdown-toggle dropdown-hover dropdown-icon"
+                                                data-toggle="dropdown"
+                                                aria-expanded="false"
                                             >
-                                        </button>
-                                        <div
-                                            class="dropdown-menu"
-                                            role="menu"
-                                            style=""
-                                        >
-                                            <a
-                                                class="dropdown-item"
-                                                href="#"
-                                                @click.prevent="editUser(user)"
-                                                ><i
-                                                    class="fa fa-edit text-success"
-                                                ></i>
-                                                edit
-                                            </a>
-                                            <a
-                                                class="dropdown-item"
-                                                href="#"
-                                                @click.prevent="
-                                                    confirmUserDeletion(user)
-                                                "
-                                                ><i
-                                                    class="fa fa-trash text-danger ml-3"
-                                                ></i>
-                                                delete
-                                            </a>
-                                            <a
-                                                class="dropdown-item"
-                                                href="#"
-                                                @click.prevent="
-                                                    confirmUserDeletion1(
-                                                        user.id
-                                                    )
-                                                "
-                                                ><i
-                                                    class="fa fa-trash text-warning ml-3"
-                                                ></i>
-                                                delete
-                                            </a>
+                                                <span class="sr-only"
+                                                    >Toggle Dropdown</span
+                                                >
+                                            </button>
+                                            <div
+                                                class="dropdown-menu"
+                                                role="menu"
+                                            >
+                                                <a
+                                                    class="dropdown-item"
+                                                    href="#"
+                                                    @click.prevent="
+                                                        editUser(user)
+                                                    "
+                                                    >تغیر <i
+                                                        class="fa fa-edit text-success  ml-4"
+                                                    ></i>
+                                                    
+                                                </a>
+                                               
+                                                <a
+                                                    class="dropdown-item"
+                                                    href="#"
+                                                    @click.prevent="
+                                                        confirmUserDeletion(
+                                                            user.id
+                                                        )
+                                                    "
+                                                    >حذف <i
+                                                        class="fa fa-trash text-danger ml-4"
+                                                    ></i>
+                                                    
+                                                </a>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                        <tbody v-else>
-                            <tr>
-                                <td colspan="13" align="center">
-                                    معلومات پيدا نشول..!
-                                </td>
-                            </tr>
-                        </tbody>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody v-else>
+                                <tr>
+                                    <td colspan="13" align="center">
+                                        معلومات پيدا نشول..!
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </transition>
+
                         <tfoot class="bg-secondary">
                             <tr>
                                 <th style="width: 10px">#</th>
@@ -485,11 +439,21 @@ onMounted(() => {
                     </table>
                 </div>
 
-                <Bootstrap4Pagination
-                    :data="users"
-                    @pagination-change-page="getUsers"
-                    class="pl-4"
-                />
+                <div>
+                    <div class="float-left pr-5 pt-2">
+                        Showing {{ users.from }} to {{ users.to }} of
+                        {{ users.total }} entries
+                    </div>
+                    <Bootstrap4Pagination
+                        size="default"
+                        :show-disabled="true"
+                        :limit="2"
+                        :keepLength="true"
+                        :data="users"
+                        @pagination-change-page="getUsers"
+                        class="pl-5"
+                    />
+                </div>
             </div>
         </div>
     </div>
@@ -610,7 +574,7 @@ onMounted(() => {
                                 <Field
                                     name="photo"
                                     type="file"
-                                    accept="image/*"
+                                    accept="image/*" 
                                     class="form-control"
                                     :class="{ 'is-invalid': errors.photo }"
                                 />
@@ -775,3 +739,23 @@ onMounted(() => {
         </div>
     </div>
 </template>
+
+<style>
+/* .v-enter-from{
+        opacity: 0;
+    }
+    .v-enter-to{
+        opacity: 1;
+    }
+    .v-enter-active{
+        transition: opacity 1s ease;
+    } */
+
+.slide-down-fade-enter-from {
+    opacity: 0;
+    transform: translateY(30px);
+}
+.slide-down-fade-enter-active {
+    transition: all 1s ease;
+}
+</style>

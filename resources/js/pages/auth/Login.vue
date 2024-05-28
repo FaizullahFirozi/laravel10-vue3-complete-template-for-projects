@@ -1,7 +1,7 @@
 <script setup>
 import axios from "axios";
 import { reactive, ref } from "vue";
-import { useToastr } from "@/toastr";
+import { useToastr } from "@/components/toastr";
 const toastr = useToastr();
 
 const form = reactive({

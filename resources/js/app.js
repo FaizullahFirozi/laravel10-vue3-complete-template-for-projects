@@ -15,11 +15,11 @@ import LaravelPermissionToVueJS from 'laravel-permission-to-vuejs'
 
 
 // FOR ADDING SIDEBAR AND NAVBAR TO BLADE
-import Sidebar from './components/pages/layouts/Sidebar.vue';
-import Navbar from './components/pages/layouts/Navbar.vue';
-import Footer from './components/pages/layouts/Footer.vue';
+import Sidebar from './pages/layouts/Sidebar.vue';
+import Navbar from './pages/layouts/Navbar.vue';
+import Footer from './pages/layouts/Footer.vue';
 // FOR LOGIN PAGE
-import Login from './components/pages/auth/Login.vue';
+import Login from './pages/auth/Login.vue';
 
 
 // FOR GENERAL SECTION

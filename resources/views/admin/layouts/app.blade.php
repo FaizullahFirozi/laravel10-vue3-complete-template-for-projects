@@ -27,6 +27,12 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     {{-- @vite(['resources/css/app_ltr.css', 'resources/js/app.js']) --}}
 
+    <style>
+        * {
+            /* HIDE SCROLLBAR */
+            scrollbar-width: none;
+        }
+    </style>
 
 </head>
 

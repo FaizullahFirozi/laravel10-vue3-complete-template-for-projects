@@ -16,8 +16,7 @@
     <div id="app">
         <router-view>
             <Login_vue />
-        </router-view>
-        
+        </router-view> 
     </div>
 </body>
 

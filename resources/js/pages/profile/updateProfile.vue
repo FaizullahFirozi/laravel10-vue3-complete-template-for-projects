@@ -2,7 +2,7 @@
 import axios from "axios";
 import { onMounted, reactive, ref } from "vue";
 
-import { useToastr } from "@/toastr";
+import { useToastr } from "@/components/toastr";
 import Swal from "sweetalert2";
 
 const toastr = useToastr();
@@ -147,7 +147,7 @@ onMounted(() => {
             <div class="row">
                 <div class="col-md-3">
                     <!-- Profile Image -->
-                    <div class="card card-primary card-outline">
+                    <div class="card card-primary card-outline h-100">
                         <div class="card-body box-profile">
                             <div class="text-center">
                                 <input
@@ -175,6 +175,7 @@ onMounted(() => {
                                 class="text-muted text-center"
                                 v-text="form.email"
                             ></p>
+                            
                         </div>
                         <!-- /.card-body -->
                     </div>
@@ -446,4 +447,6 @@ onMounted(() => {
     background-color: rgb(43, 255, 0);
     cursor: pointer;
 }
+
 </style>
+
