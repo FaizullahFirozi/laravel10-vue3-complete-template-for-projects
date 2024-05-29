@@ -1,17 +1,20 @@
 <script setup>
-import axios from "axios";
-import { ref, onMounted, reactive, watch } from "vue";
+// import axios from "axios";
+import { ref, onMounted, reactive, watch, computed } from "vue";
 import { Form, Field } from "vee-validate";
 import * as yup from "yup";
 
-import { useToastr } from "@/components/toastr";
+import {
+    useToastrSuccess,
+    useToastrError,
+    useSweetAlert,
+} from "@/components/toastr";
 import Swal from "sweetalert2";
 
 // ADDED FOR SEARCH TO NOT SEND REAQUES IN EVERY BUTTON ENTERD
 import { debounce } from "lodash";
 import { Bootstrap4Pagination } from "laravel-vue-pagination";
 
-const toastr = useToastr();
 const users = ref({ data: [] });
 const editing = ref(false);
 const form = ref(null);
@@ -69,19 +72,13 @@ const createUser = (values, { resetForm, setFieldError }) => {
     axios
         .post("/api/users", values)
         .then((response) => {
-            //*****Sweet Alert*****
-            Swal.fire({
-                position: "top-end",
-                icon: "success",
-                title: "معلومات تعغیر شول",
-                showConfirmButton: false,
-                timer: 1500,
-            });
+            useSweetAlert();
+            useToastrSuccess();
 
             $("#userFormModal").modal("hide");
             users.value.data.unshift(response.data);
             resetForm();
-            toastr.success("Added Successfull", "Success");
+            // toastr.success("Added Successfull", "Success");
         })
         .catch((error) => {
             setFieldError("phone", error.response.data.errors.phone);
@@ -89,7 +86,7 @@ const createUser = (values, { resetForm, setFieldError }) => {
             setFieldError("nic", error.response.data.errors.nic);
 
             if (error.response.status === 422) {
-                toastr.error("validation error", "مشکل");
+                // toastr.error("validation error", "مشکل");
             }
         })
         .finally(() => {
@@ -109,15 +106,14 @@ const updateUser = (values, { setFieldError }) => {
             );
             users.value.data[index] = response.data;
             $("#userFormModal").modal("hide");
-            toastr.info("د کارمند معلومات تعغیر شول", "مبارک شه");
-            // toastr.success(response.data.message, response.data.title);
+            useSweetAlert("مبارک شه", "د کارمند معلومات تعغیر شول");
         })
         .catch((error) => {
             setFieldError("phone", error.response.data.errors.phone);
             setFieldError("email", error.response.data.errors.email);
 
             if (error.response.status === 422) {
-                toastr.error("validation error", "مشکل");
+                // useToastrError("مشکل", "validation error");
             }
         })
         .finally(() => {
@@ -191,14 +187,7 @@ const confirmUserDeletion = (id) => {
                 //     text: "ستاسو کارمند حذف شو!",
                 //     icon: "success",
                 // });
-                Swal.fire({
-                    position: "top-end",
-                    icon: "success",
-                    title: "حذف شو!",
-                    // text: "ستاسو کارمند حذف شو!",
-                    showConfirmButton: false,
-                    timer: 1200,
-                });
+                useSweetAlert("حذف شو!");
             });
         }
     });
@@ -207,6 +196,18 @@ const confirmUserDeletion = (id) => {
 // FOR SEARCH
 const searchQuery = ref(null);
 const perPage = ref(5);
+
+// FOR CHANGE SEARCH ICON 
+const searchIcon = computed(() => {
+    return searchQuery.value ? "fas fa-times" : "fas fa-search";
+});
+
+// FOR CLEAR SEARCHBAR
+const clearSearch = () => {
+    if (searchQuery.value) {
+        searchQuery.value = "";
+    } 
+};
 
 const search = () => {
     axios
@@ -319,8 +320,11 @@ onMounted(() => {
                         />
 
                         <div class="input-group-append">
-                            <button class="btn btn-default">
-                                <i class="fas fa-search"></i>
+                            <button
+                                class="btn btn-default"
+                                @click="clearSearch"
+                            >
+                                <i :class="searchIcon"></i>
                             </button>
                         </div>
                     </div>
@@ -350,8 +354,7 @@ onMounted(() => {
                         </thead>
                         <transition name="slide-down-fade">
                             <tbody v-if="users.data.length > 0">
-                                <tr
-                                    v-for="user in users.data" :key="user.id" >
+                                <tr v-for="user in users.data" :key="user.id">
                                     <td>{{ user.id }}</td>
                                     <td>{{ user.name }}</td>
                                     <td>{{ user.last_name }}</td>
@@ -386,12 +389,12 @@ onMounted(() => {
                                                     @click.prevent="
                                                         editUser(user)
                                                     "
-                                                    >تغیر <i
-                                                        class="fa fa-edit text-success  ml-4"
+                                                    >تغیر
+                                                    <i
+                                                        class="fa fa-edit text-success ml-4"
                                                     ></i>
-                                                    
                                                 </a>
-                                               
+
                                                 <a
                                                     class="dropdown-item"
                                                     href="#"
@@ -400,10 +403,10 @@ onMounted(() => {
                                                             user.id
                                                         )
                                                     "
-                                                    >حذف <i
+                                                    >حذف
+                                                    <i
                                                         class="fa fa-trash text-danger ml-4"
                                                     ></i>
-                                                    
                                                 </a>
                                             </div>
                                         </div>
@@ -574,7 +577,7 @@ onMounted(() => {
                                 <Field
                                     name="photo"
                                     type="file"
-                                    accept="image/*" 
+                                    accept="image/*"
                                     class="form-control"
                                     :class="{ 'is-invalid': errors.photo }"
                                 />

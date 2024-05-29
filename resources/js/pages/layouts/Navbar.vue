@@ -1,3 +1,10 @@
+<!-- <script setup>
+    import { onMounted } from 'vue';
+    onMounted(() => {
+        document.cookie = 'locale=PS';
+    });
+</script> -->
+
 <template>
     <!-- Left navbar links -->
     <ul class="navbar-nav">
@@ -184,13 +191,13 @@
                 <i class="flag-icon flag-icon-sa"></i>
             </a>
             <div class="dropdown-menu dropdown-menu-left p-0">
-                <a href="#" class="dropdown-item active">
+                <a href="#" @click="$i18n.locale = `PS`" class="dropdown-item">
                     <i class="flag-icon flag-icon-af ml-2"></i> Pashto
                 </a>
-                <a href="#" class="dropdown-item">
+                <a href="#" @click="$i18n.locale = `DR`" class="dropdown-item">
                     <i class="flag-icon flag-icon-tj ml-2"></i> Dari
                 </a>
-                <a href="#" class="dropdown-item">
+                <a href="#" @click="$i18n.locale = `EN`" class="dropdown-item">
                     <i class="flag-icon flag-icon-us ml-2"></i> English
                 </a>
             </div>

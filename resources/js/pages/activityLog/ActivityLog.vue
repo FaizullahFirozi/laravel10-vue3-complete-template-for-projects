@@ -1,6 +1,6 @@
 <script setup>
 import axios from "axios";
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch, computed } from "vue";
 
 
 // ADDED FOR SEARCH TO NOT SEND REAQUES IN EVERY BUTTON ENTERD
@@ -24,6 +24,20 @@ const fetchActivityLog = (page = 1, per_Page = perPage.value) => {
 // FOR SEARCH
 const searchQuery = ref(null);
 const perPage = ref(5);
+
+
+// FOR CHANGE SEARCH ICON 
+const searchIcon = computed(() => {
+    return searchQuery.value ? "fas fa-times" : "fas fa-search";
+     
+});
+
+// FOR CLEAR SEARCHBAR
+const clearSearch = () => {
+    if (searchQuery.value) {
+        searchQuery.value = "";
+    } 
+};
 
 const search = () => {
     axios
@@ -117,8 +131,11 @@ function formatDate(dateString) {
                         />
 
                         <div class="input-group-append">
-                            <button class="btn btn-default">
-                                <i class="fas fa-search"></i>
+                            <button
+                                class="btn btn-default"
+                                @click="clearSearch"
+                            >
+                                <i :class="searchIcon"></i>
                             </button>
                         </div>
                     </div>

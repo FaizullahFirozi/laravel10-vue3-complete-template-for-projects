@@ -1,20 +1,86 @@
-<template>
-  
+<script>
+export default {
+    data() {
+        //FOR TEST PORPUSE ONLY
+        return {
+            searchQuerySidebar: "",
+            showModal: false,
+            sidebarItems: [
+                { id: 1, name: "Dashboard", searchLink: "/admin/dashboard" },
+                { id: 2, name: "Dashboard2", searchLink: "/admin/dashboard2" },
+                { id: 3, name: "CRUD-Test", searchLink: "/admin/CRUD-Test" },
+                { id: 4, name: "User", searchLink: "/admin/users" },
+                { id: 5, name: "Profile", searchLink: "/admin/profile" },
+                {
+                    id: 5,
+                    name: "Activity Log",
+                    searchLink: "/admin/activity-log",
+                },
+                // Add more sidebar items as needed
+            ],
+        };
+    },
+    computed: {
+        filteredItems() {
+            return this.sidebarItems.filter((item) => {
+                return item.name
+                    .toLowerCase()
+                    .includes(this.searchQuerySidebar.toLowerCase());
+            });
+        },
+    },
+    methods: {
+        filterSidebarItems() {
+            this.showModal = this.searchQuerySidebar.length > 0; // Show modal if search query is not empty
+        },
+        closeModal() {
+            this.showModal = false;
+        },
 
+        // FOR CLEAR SEARCHBAR
+        clearSearchSidebar() {
+            if (this.searchQuerySidebar) {
+                this.searchQuerySidebar = "";
+            }
+        },
+    },
+};
+</script>
+<template>
     <!-- SidebarSearch Form -->
     <div class="form-inline">
         <div class="input-group" data-widget="sidebar-search">
             <input
+                v-model="searchQuerySidebar"
+                @input="filterSidebarItems"
                 class="form-control form-control-sidebar"
                 type="search"
                 placeholder="Search"
                 aria-label="Search"
             />
             <div class="input-group-append">
-                <button class="btn btn-sidebar">
+                <button @click="clearSearchSidebar" class="btn btn-sidebar">
                     <i class="fas fa-search fa-fw"></i>
                 </button>
             </div>
+        </div>
+
+        <div class="modal" :class="{ 'is-active': showModal }">
+            <div class="modal-background" @click="closeModal"></div>
+            <div class="modal-content">
+                <ul class="sidebar-menu">
+                    <li v-for="item in filteredItems" :key="item.id">
+                        <router-link to="{{item.searchLink}}"
+                            ><p>{{ item.name }}</p></router-link
+                        >
+                    </li>
+                </ul>
+            </div>
+            <button
+                class="modal-close is-large"
+                aria-label="close"
+                @click="closeModal"
+            ></button>
         </div>
     </div>
 
@@ -57,7 +123,7 @@
                     <p>CRUD Test</p>
                 </router-link>
             </li>
-            
+
             <li class="nav-item">
                 <router-link
                     to="/admin/users"
@@ -126,7 +192,6 @@
                     </p>
                 </a>
             </li>
-        
         </ul>
     </nav>
     <!-- /.sidebar-menu -->

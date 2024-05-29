@@ -2,10 +2,7 @@
 import axios from "axios";
 import { onMounted, reactive, ref } from "vue";
 
-import { useToastr } from "@/components/toastr";
-import Swal from "sweetalert2";
-
-const toastr = useToastr();
+import { useToastrSuccess, useToastrError, useToastrWarning, useSweetAlert } from "@/components/toastr";
 
 const form = ref({
     name: "",
@@ -30,17 +27,8 @@ const updateProfile = () => {
     axios
         .put("/api/profile", form.value)
         .then((response) => {
-            toastr.success("د کارمند معلومات تعغیر شول", "مبارک شه");
-            // toastr.success(response.data.message, response.data.title);
-
-            //*****Sweet Alert*****
-            Swal.fire({
-                position: "top-end",
-                icon: "success",
-                title: "معلومات تعغیر شول",
-                showConfirmButton: false,
-                timer: 1500,
-            });
+            useToastrSuccess("مبارک شه", "ستا معلومات تعغیر شول");
+            useSweetAlert();
         })
         .catch((error) => {
             // setFieldError("email", error.response.data.errors.email);
@@ -48,7 +36,7 @@ const updateProfile = () => {
 
             if (error.response && error.response.status === 422) {
                 errors.value = error.response.data.errors;
-                toastr.error("validation error", "مشکل");
+                useToastrError( "مشکل", "validation error");
             }
         })
         .finally(() => {
@@ -70,12 +58,13 @@ const handleChangePassword = () => {
     axios
         .post("/api/change-user-password", changePasswordForm)
         .then((response) => {
-            toastr.success(response.data.message);
-            // toastr.success('ستاسو پسورد تعغیر شو.', 'چاره بریالۍ وه!')
+            useToastrSuccess("مبارک شه", response.data.message);
+            useSweetAlert("مبارک شه", response.data.message);
         })
         .catch((error) => {
             errors.value = error.response.data.errors;
-            toastr.error("ستاسو پسورد تعغیر نشو.", "چاره ناکامه وه!");
+            useSweetAlert("چاره ناکامه وه!", 'ستاسو پسورد تعغیر نشو.', 'error');
+
         })
         .finally(() => {
             loading_spinner.value = false;
@@ -98,7 +87,8 @@ const handleFileChange = (event) => {
     const maxSizeInMB = 2; 
     const maxSizeInBytes = maxSizeInMB * 1024 * 1024; // Convert MB to Bytes
     if (file.size > maxSizeInBytes) {
-        toastr.error(`د عکس اندازه باید له ${maxSizeInMB} MB څخه کم وی`, "د عکس مشکل");
+        useToastrWarning("د عکس مشکل", `د عکس اندازه باید له ${maxSizeInMB} MB څخه کم وی`);
+        // useSweetAlert("د عکس مشکل", `د عکس اندازه باید له ${maxSizeInMB} MB څخه کم وی`, 'info');
 
     } else {
         profilePictureUrl.value = URL.createObjectURL(file);
@@ -107,7 +97,7 @@ const handleFileChange = (event) => {
         formData.append("profile_picture", file);
 
         axios.post("/api/upload-profile-image", formData).then((response) => {
-            toastr.success("عکس په بریالی توګه اضافه شو", "اضافه شو");
+            useSweetAlert("مبارک شه", "عکس په بریالی توګه اضافه شو");
         });
     }
 };

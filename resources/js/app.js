@@ -28,27 +28,7 @@ import { createApp } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import Routes from './routes.js';
 
-
-// this section is only for lang
-import { createI18n } from 'vue-i18n';
-import EN from './lang/en.json';
-import PS from './lang/ps.json';
-import DR from './lang/dr.json';
-
-// for login
-
-
-
-const i18n = createI18n({
-    // something vue-i18n options here ...
-    locale: 'PS',
-    messages: {
-        EN: EN,
-        // EN: EN,
-        PS: PS,
-        DR: DR,
-    }
-});
+import i18n from './lang/locale.js';
 
 const app = createApp({});
 // FOR MASTER PAGE
@@ -72,9 +52,6 @@ app.use(router);
 
 // FOR PERMISSIONS
 app.use(LaravelPermissionToVueJS);
-
-
-
 
 app.mount('#app');
 
