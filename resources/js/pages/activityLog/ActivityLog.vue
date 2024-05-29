@@ -2,41 +2,54 @@
 import axios from "axios";
 import { ref, onMounted, watch, computed } from "vue";
 
-
 // ADDED FOR SEARCH TO NOT SEND REAQUES IN EVERY BUTTON ENTERD
 import { debounce } from "lodash";
 import { Bootstrap4Pagination } from "laravel-vue-pagination";
 
-
-const activity_logs = ref({ data: []});
-
-
+const activity_logs = ref({ data: [] });
 
 // GETTING DATA FROM DATABASE
 const fetchActivityLog = (page = 1, per_Page = perPage.value) => {
-    axios.get(`/api/activity_log?page=${page}&per_page=${per_Page}`).then((response) => {
-        activity_logs.value = response.data;
-
-    });
+    axios
+        .get(`/api/activity_log?page=${page}&per_page=${per_Page}`)
+        .then((response) => {
+            activity_logs.value = response.data;
+        });
 };
 
+// FOR SORTING SECTION
+let sortOrder = "asc"; // Initial sort order
+const sortBy = (field) => {
+    if (field === "id" || field === "description") {
+        if (Array.isArray(activity_logs.value.data)) {
+            activity_logs.value.data.sort((a, b) => {
+                const multiplier = sortOrder === "asc" ? 1 : -1;
+                // For string fields like 'description', use localeCompare for sorting
+                if (typeof a[field] === "string") {
+                    return multiplier * a[field].localeCompare(b[field]);
+                }
+                // For numeric fields like 'id', use direct comparison
+                return multiplier * (a[field] - b[field]);
+            });
+            sortOrder = sortOrder === "asc" ? "desc" : "asc";
+        }
+    }
+};
 
 // FOR SEARCH
 const searchQuery = ref(null);
 const perPage = ref(5);
 
-
-// FOR CHANGE SEARCH ICON 
+// FOR CHANGE SEARCH ICON
 const searchIcon = computed(() => {
     return searchQuery.value ? "fas fa-times" : "fas fa-search";
-     
 });
 
 // FOR CLEAR SEARCHBAR
 const clearSearch = () => {
     if (searchQuery.value) {
         searchQuery.value = "";
-    } 
+    }
 };
 
 const search = () => {
@@ -83,7 +96,9 @@ function formatDate(dateString) {
                 <div class="col-sm-6">
                     <span class="badge badge-pill text-md badge-warning"
                         >ټول لاګونه:
-                        <span class="badge badge-pill text-md badge-success">{{ activity_logs.total }}</span></span
+                        <span class="badge badge-pill text-md badge-success">{{
+                            activity_logs.total
+                        }}</span></span
                     >
                 </div>
                 <div class="col-sm-6">
@@ -104,7 +119,6 @@ function formatDate(dateString) {
         <div class="container-fluid">
             <div class="card">
                 <div class="card-body">
-
                     <select
                         v-model="perPage"
                         dir="ltr"
@@ -142,13 +156,12 @@ function formatDate(dateString) {
                     <table
                         class="table table-borderless table-bordered table-responsive-sm table-responsive-md table-responsive-lg"
                     >
-                        
                         <thead class="bg-secondary">
                             <tr>
-                                <th style="width: 10px">#</th>
+                                <th style="width: 10px" @click="sortBy('id')"> ID <i class="fas fa-sort"></i></th>
                                 <th>User Name</th>
                                 <th>Changes Table</th>
-                                <th>Log Name</th>
+                                <th @click="sortBy('description')">Log Name <i class="fas fa-sort"></i></th>                               
                                 <th>DATE</th>
                                 <th class="text-left">New Data</th>
                                 <th class="text-left">Old Data</th>
@@ -204,7 +217,8 @@ function formatDate(dateString) {
                 </div>
                 <div>
                     <div class="float-left pr-5 pt-2">
-                        Showing {{ activity_logs.from }} to {{ activity_logs.to }} of
+                        Showing {{ activity_logs.from }} to
+                        {{ activity_logs.to }} of
                         {{ activity_logs.total }} entries
                     </div>
                     <Bootstrap4Pagination

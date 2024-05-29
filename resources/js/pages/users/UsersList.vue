@@ -33,6 +33,26 @@ const getUsers = (page = 1, per_Page = perPage.value) => {
         });
 };
 
+// FOR SORTING ID
+let sortOrder = 'asc'; // Initial sort order
+
+const sortBy = (field) => {
+  if (field === 'id' || field === 'name') {
+    if (Array.isArray(users.value.data)) {
+      users.value.data.sort((a, b) => {
+        const multiplier = sortOrder === 'asc' ? 1 : -1;
+        // For string fields like 'name', use localeCompare for sorting
+        if (typeof a[field] === 'string') {
+          return multiplier * a[field].localeCompare(b[field]);
+        }
+        // For numeric fields like 'id', use direct comparison
+        return multiplier * (a[field] - b[field]);
+      });
+      sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+    }
+  }
+};
+
 // FRONTEND FORM VALIDATION FOR NEW ADD
 const createUserSchema = yup.object({
     name: yup.string().required().min(3),
@@ -337,8 +357,8 @@ onMounted(() => {
                     >
                         <thead class="bg-secondary">
                             <tr>
-                                <th style="width: 10px">#</th>
-                                <th>Name</th>
+                                <th style="width: 10px" @click="sortBy('id')"> ID <i class="fas fa-sort"></i></th>
+                                <th @click="sortBy('name')">Name <i class="fas fa-sort"></i></th>
                                 <th>Last Name</th>
                                 <th>Father Name</th>
                                 <th>DOB</th>
@@ -424,7 +444,7 @@ onMounted(() => {
 
                         <tfoot class="bg-secondary">
                             <tr>
-                                <th style="width: 10px">#</th>
+                                <th style="width: 10px">ID</th>
                                 <th>Name</th>
                                 <th>Last Name</th>
                                 <th>Father Name</th>

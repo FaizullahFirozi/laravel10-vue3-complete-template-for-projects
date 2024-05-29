@@ -16,6 +16,12 @@ const getUser = () => {
     });
 };
 
+// ADDING NOTIFICATION MESSAGE...
+const playNotificationSound = () => {
+    const audio = new Audio('/notifi_sound.wav');
+    audio.play();
+};
+
 // UPDATE PROFILE SECTION
 const errors = ref([]);
 const loading_spinner = ref(false);
@@ -29,6 +35,7 @@ const updateProfile = () => {
         .then((response) => {
             useToastrSuccess("مبارک شه", "ستا معلومات تعغیر شول");
             useSweetAlert();
+            playNotificationSound(); // Play sound on success
         })
         .catch((error) => {
             // setFieldError("email", error.response.data.errors.email);
@@ -60,6 +67,8 @@ const handleChangePassword = () => {
         .then((response) => {
             useToastrSuccess("مبارک شه", response.data.message);
             useSweetAlert("مبارک شه", response.data.message);
+            playNotificationSound(); // Play sound on success
+
         })
         .catch((error) => {
             errors.value = error.response.data.errors;

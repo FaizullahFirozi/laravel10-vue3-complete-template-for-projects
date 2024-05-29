@@ -28,9 +28,9 @@ class UserController extends Controller
 
         // $users = User::latest()->get();
 
-        $perPage = request('per_page');
+        $perPage = request('per_page', 10);
         $users = User::latest()->paginate($perPage);
-
+   
         return response()->json($users);
     }
 

@@ -28,7 +28,7 @@ class UserFactory extends Factory
             'last_name' => fake()->lastName(),
             'father_name' => fake()->userName(),
             'dob' => fake()->date('Y'),
-            'nic' => fake()->unique()->numberBetween(100, 10000),
+            'nic' => fake()->unique()->numberBetween(1, 100000),
             'hire_date' => now(),
             'gross_salary' => fake()->numberBetween(1000, 100000),
             'phone' => fake()->unique()->phoneNumber(),
