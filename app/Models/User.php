@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 // ADD FOR VUE SECTION PERMISSION
 use LaravelAndVueJS\Traits\LaravelPermissionToVueJS;
 
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles, LogsActivity, LaravelPermissionToVueJS;
@@ -77,6 +78,11 @@ class User extends Authenticatable
         'created_at',
         'updated_at',
     ];
+
+    // public function Activity()
+    // {
+    //     return $this->belongsToMany(Activity::class);
+    // }
 
     /**
      * The attributes that should be cast.

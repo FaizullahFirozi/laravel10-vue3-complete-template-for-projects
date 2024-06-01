@@ -172,6 +172,7 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        return 'ruojsdlkf';
         $this->authorize('user-delete');
 
         $user->delete();

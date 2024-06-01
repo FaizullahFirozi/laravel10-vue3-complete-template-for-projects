@@ -46,6 +46,21 @@ export default [
         component: () => import('./pages/crudTest/crudTest.vue'),
     },
     {
+        path: '/admin/roles',
+        name: 'admin.roles',
+        component: () => import('./pages/roles/RolesList.vue'),
+    },
+    {
+        path: '/admin/roles/add',
+        name: 'admin.roles.add',
+        component: () => import('./pages/roles/RolesAdd.vue'),
+    },
+    {
+        path: '/admin/roles/:id/edit',
+        name: 'admin.roles.edit',
+        component: () => import('./pages/roles/RolesEdit.vue'),
+    },
+    {
         path: '/admin/activity-log',
         name: 'admin.activity-log',
         component: () => import('./pages/activityLog/ActivityLog.vue'),

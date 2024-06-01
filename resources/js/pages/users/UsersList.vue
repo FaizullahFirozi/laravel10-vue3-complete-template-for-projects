@@ -22,8 +22,6 @@ const form = ref(null);
 const loading_spinner = ref(false);
 const loading_spinner_submit = ref(false);
 
-const userIdBeingDeleted = ref(null);
-
 // GETTING DATA FROM DATABASE
 const getUsers = (page = 1, per_Page = perPage.value) => {
     axios
@@ -34,23 +32,23 @@ const getUsers = (page = 1, per_Page = perPage.value) => {
 };
 
 // FOR SORTING ID
-let sortOrder = 'asc'; // Initial sort order
+let sortOrder = "asc"; // Initial sort order
 
 const sortBy = (field) => {
-  if (field === 'id' || field === 'name') {
-    if (Array.isArray(users.value.data)) {
-      users.value.data.sort((a, b) => {
-        const multiplier = sortOrder === 'asc' ? 1 : -1;
-        // For string fields like 'name', use localeCompare for sorting
-        if (typeof a[field] === 'string') {
-          return multiplier * a[field].localeCompare(b[field]);
+    if (field === "id" || field === "name") {
+        if (Array.isArray(users.value.data)) {
+            users.value.data.sort((a, b) => {
+                const multiplier = sortOrder === "asc" ? 1 : -1;
+                // For string fields like 'name', use localeCompare for sorting
+                if (typeof a[field] === "string") {
+                    return multiplier * a[field].localeCompare(b[field]);
+                }
+                // For numeric fields like 'id', use direct comparison
+                return multiplier * (a[field] - b[field]);
+            });
+            sortOrder = sortOrder === "asc" ? "desc" : "asc";
         }
-        // For numeric fields like 'id', use direct comparison
-        return multiplier * (a[field] - b[field]);
-      });
-      sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
     }
-  }
 };
 
 // FRONTEND FORM VALIDATION FOR NEW ADD
@@ -217,7 +215,7 @@ const confirmUserDeletion = (id) => {
 const searchQuery = ref(null);
 const perPage = ref(5);
 
-// FOR CHANGE SEARCH ICON 
+// FOR CHANGE SEARCH ICON
 const searchIcon = computed(() => {
     return searchQuery.value ? "fas fa-times" : "fas fa-search";
 });
@@ -226,7 +224,7 @@ const searchIcon = computed(() => {
 const clearSearch = () => {
     if (searchQuery.value) {
         searchQuery.value = "";
-    } 
+    }
 };
 
 const search = () => {
@@ -357,8 +355,12 @@ onMounted(() => {
                     >
                         <thead class="bg-secondary">
                             <tr>
-                                <th style="width: 10px" @click="sortBy('id')"> ID <i class="fas fa-sort"></i></th>
-                                <th @click="sortBy('name')">Name <i class="fas fa-sort"></i></th>
+                                <th style="width: 10px" @click="sortBy('id')">
+                                    ID <i class="fas fa-sort"></i>
+                                </th>
+                                <th @click="sortBy('name')">
+                                    Name <i class="fas fa-sort"></i>
+                                </th>
                                 <th>Last Name</th>
                                 <th>Father Name</th>
                                 <th>DOB</th>
@@ -414,7 +416,6 @@ onMounted(() => {
                                                         class="fa fa-edit text-success ml-4"
                                                     ></i>
                                                 </a>
-
                                                 <a
                                                     class="dropdown-item"
                                                     href="#"
@@ -487,7 +488,7 @@ onMounted(() => {
         id="userFormModal"
         data-backdrop="static"
         data-keyboard="false"
-        tabindex="-1"
+        tabindex="-1"   
         aria-labelledby="staticBackdropLabel"
         aria-hidden="true"
     >
@@ -501,7 +502,11 @@ onMounted(() => {
                         'bg-primary': !editing,
                     }"
                 >
-                    <button type="button" class="close" data-dismiss="modal">
+                    <button
+                        type="button"
+                        class="close bg-danger"
+                        data-dismiss="modal"
+                    >
                         &times;
                     </button>
                     <h4 class="modal-title">
@@ -710,54 +715,6 @@ onMounted(() => {
                         </button>
                     </div>
                 </Form>
-            </div>
-        </div>
-    </div>
-
-    <!-- The Delete Modal -->
-    <div
-        class="modal fade"
-        id="deleteUserModal"
-        data-backdrop="static"
-        data-keyboard="false"
-        tabindex="-1"
-        aria-labelledby="staticBackdropLabel"
-        aria-hidden="true"
-    >
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <!-- Modal Header -->
-                <div class="modal-header bg-warning">
-                    <h4 class="modal-title">Delete User</h4>
-                    <button type="button" class="close" data-dismiss="modal">
-                        &times;
-                    </button>
-                </div>
-                <!-- Modal body -->
-                <div class="modal-body">
-                    <h6 class="modal-title">
-                        Are you Sure want to Delete User ?
-                    </h6>
-                </div>
-
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                    <button
-                        @click.prevent="deleteUser"
-                        type="submit"
-                        class="btn btn-danger pr-4 pl-4"
-                    >
-                        Yes
-                    </button>
-
-                    <button
-                        type="button"
-                        class="btn btn-secondary pr-5 pl-5"
-                        data-dismiss="modal"
-                    >
-                        No
-                    </button>
-                </div>
             </div>
         </div>
     </div>

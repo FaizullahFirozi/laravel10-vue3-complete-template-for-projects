@@ -144,6 +144,15 @@ export default {
             </li>
             <li class="nav-item">
                 <router-link
+                    to="/admin/roles"
+                    active-class="active"
+                    class="nav-link"
+                    ><i class="nav-icon fa fa-user"></i>
+                    <p>Roles</p>
+                </router-link>
+            </li>
+            <li class="nav-item">
+                <router-link
                     to="/admin/activity-log"
                     active-class="active"
                     class="nav-link"

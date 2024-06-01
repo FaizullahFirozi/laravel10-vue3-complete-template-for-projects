@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\RolesController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\CrudTestController;
@@ -21,7 +22,6 @@ use Spatie\Activitylog\Models\Activity;
 
 Route::get('csrf', function () {
     return csrf_token();
-    
 });
 
 Route::get('/ip', [UserController::class, 'showIpAddress']); //show ip and mac
@@ -39,10 +39,22 @@ Route::get('/welcome', function () {
     return view('welcome');
 });
 
+
+// // only Can Super Admin 
+// Route::middleware(['auth', 'role:Super Admin'])->name('admin.')->prefix('admin')->group(function () {
+//     Route::resource('/api/roles', RolesController::class);
+// });
+
+
 Route::middleware('auth')->group(function () {
 
-    Route::resource('/api/crudtest', CrudTestController::class);
-
+    // CRUD TEST ROUTE SECTION
+    // Route::resource('/api/crudtest', CrudTestController::class); //THAT NOT WORK
+    Route::get('/api/crudtest', [CrudTestController::class, 'index']);
+    Route::get('/api/crudtest/search', [CrudTestController::class, 'search']);
+    Route::post('/api/crudtest', [CrudTestController::class, 'store']);
+    Route::put('/api/crudtest/{crudTest}', [CrudTestController::class, 'update']);
+    Route::delete('/api/crudtest/{crudTest}', [CrudTestController::class, 'destroy']);
 
     // USER ROUTE SECTION
     Route::get('/api/users', [UserController::class, 'index']);
@@ -62,6 +74,14 @@ Route::middleware('auth')->group(function () {
     // ACTIVITY LOG
     Route::get('/api/activity_log', [ActivityLogController::class, 'index']);
     Route::get('/api/activity_log/search', [ActivityLogController::class, 'search']);
+
+    // ROLES GO ABOVE 
+    Route::get('/api/roles', [RolesController::class, 'index']);
+    Route::get('/api/roles/create', [RolesController::class, 'create']);
+    Route::post('/api/roles', [RolesController::class, 'store']);
+    Route::get('/api/roles/{id}', [RolesController::class, 'show']);
+    Route::get('/api/roles/{id}/edit', [RolesController::class, 'edit']);
+    Route::put('/api/roles/{id}', [RolesController::class, 'update']);
 
 
     // FOR CHANGE PASSWORD

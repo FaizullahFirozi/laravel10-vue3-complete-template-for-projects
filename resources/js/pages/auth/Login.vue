@@ -6,6 +6,7 @@ import { useToastrError } from "@/components/toastr";
 const form = reactive({
     email: "",
     password: "",
+    remember: "",
 });
 
 const loading_spinner = ref(false);
@@ -90,7 +91,7 @@ const handleSubmit = () => {
                         <div class="row">
                             <div class="col-8">
                                 <div class="icheck-primary float-left">
-                                    <input type="checkbox" id="remember" />
+                                    <input type="checkbox" v-model="form.remember" id="remember" />
                                     <label for="remember"> Remember Me </label>
                                 </div>
                             </div>

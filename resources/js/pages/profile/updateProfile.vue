@@ -2,7 +2,12 @@
 import axios from "axios";
 import { onMounted, reactive, ref } from "vue";
 
-import { useToastrSuccess, useToastrError, useToastrWarning, useSweetAlert } from "@/components/toastr";
+import {
+    useToastrSuccess,
+    useToastrError,
+    useToastrWarning,
+    useSweetAlert,
+} from "@/components/toastr";
 
 const form = ref({
     name: "",
@@ -18,7 +23,7 @@ const getUser = () => {
 
 // ADDING NOTIFICATION MESSAGE...
 const playNotificationSound = () => {
-    const audio = new Audio('/notifi_sound.wav');
+    const audio = new Audio("/notifi_sound.wav");
     audio.play();
 };
 
@@ -43,7 +48,7 @@ const updateProfile = () => {
 
             if (error.response && error.response.status === 422) {
                 errors.value = error.response.data.errors;
-                useToastrError( "مشکل", "validation error");
+                useToastrError("مشکل", "validation error");
             }
         })
         .finally(() => {
@@ -68,12 +73,10 @@ const handleChangePassword = () => {
             useToastrSuccess("مبارک شه", response.data.message);
             useSweetAlert("مبارک شه", response.data.message);
             playNotificationSound(); // Play sound on success
-
         })
         .catch((error) => {
             errors.value = error.response.data.errors;
-            useSweetAlert("چاره ناکامه وه!", 'ستاسو پسورد تعغیر نشو.', 'error');
-
+            useSweetAlert("چاره ناکامه وه!", "ستاسو پسورد تعغیر نشو.", "error");
         })
         .finally(() => {
             loading_spinner.value = false;
@@ -90,15 +93,16 @@ const openFileInput = () => {
 const profilePictureUrl = ref(null);
 
 const handleFileChange = (event) => {
-   
     const file = event.target.files[0];
 
-    const maxSizeInMB = 2; 
+    const maxSizeInMB = 2;
     const maxSizeInBytes = maxSizeInMB * 1024 * 1024; // Convert MB to Bytes
     if (file.size > maxSizeInBytes) {
-        useToastrWarning("د عکس مشکل", `د عکس اندازه باید له ${maxSizeInMB} MB څخه کم وی`);
+        useToastrWarning(
+            "د عکس مشکل",
+            `د عکس اندازه باید له ${maxSizeInMB} MB څخه کم وی`
+        );
         // useSweetAlert("د عکس مشکل", `د عکس اندازه باید له ${maxSizeInMB} MB څخه کم وی`, 'info');
-
     } else {
         profilePictureUrl.value = URL.createObjectURL(file);
 
@@ -174,7 +178,6 @@ onMounted(() => {
                                 class="text-muted text-center"
                                 v-text="form.email"
                             ></p>
-                            
                         </div>
                         <!-- /.card-body -->
                     </div>
@@ -349,7 +352,7 @@ onMounted(() => {
                                                         'is-invalid':
                                                             errors.password,
                                                     }"
-                                                    required 
+                                                    required
                                                     autocomplete
                                                 />
                                                 <span
@@ -448,4 +451,3 @@ onMounted(() => {
 }
 
 </style>
-
