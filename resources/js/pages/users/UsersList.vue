@@ -654,9 +654,13 @@ onMounted(() => {
                                 class="form-control"
                                 :class="{ 'is-invalid': errors.dob }"
                             />
+                            <date-picker :modal="true" shortcut :auto-submit="false" />
+                            <date-picker :modal="true"  color="purple" :column="1" mode="single" placeholder="تاریخ تولد"></date-picker>
+
                             <span class="invalid-feedback">{{
                                 errors.dob
                             }}</span>
+                                     
                         </div>
                         <div class="form-group col-lg-4">
                             <label>Hire Date</label>

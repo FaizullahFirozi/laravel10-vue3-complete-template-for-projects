@@ -38,7 +38,7 @@ app.component('sidebar_vue', Sidebar);
 app.component('navbar_vue', Navbar);
 app.component('footer_vue', Footer);
 app.component('loader_vue', loader);
-app.component('DatePicker', DatePicker);
+app.component('date-picker', DatePicker);
 
 // for login page
 app.component('Login_vue', Login);
