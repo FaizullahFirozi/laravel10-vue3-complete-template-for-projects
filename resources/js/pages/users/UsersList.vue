@@ -437,7 +437,12 @@ onMounted(() => {
                             <tbody v-else>
                                 <tr>
                                     <td colspan="13" align="center">
-                                        معلومات پيدا نشول..!
+                                        مهربانی وکړئ لږ انتظار شئ...
+                                        <div
+                                        class="spinner-border text-gray"
+                                    >
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
                                     </td>
                                 </tr>
                             </tbody>

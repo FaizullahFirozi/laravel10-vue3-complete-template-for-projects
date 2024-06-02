@@ -209,6 +209,11 @@ function formatDate(dateString) {
                                 <tr>
                                     <td colspan="13" align="center">
                                         مهربانی وکړئ لږ انتظار شئ...
+                                        <div
+                                        class="spinner-border text-gray"
+                                    >
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
                                     </td>
                                 </tr>
                             </tbody>
@@ -236,16 +241,6 @@ function formatDate(dateString) {
     </div>
 </template>
 <style>
-/* .v-enter-from{
-        opacity: 0;
-    }
-    .v-enter-to{
-        opacity: 1;
-    }
-    .v-enter-active{
-        transition: opacity 1s ease;
-    } */
-
 .slide-down-fade-frz-enter-from {
     opacity: 0;
     transform: translateY(-30px);

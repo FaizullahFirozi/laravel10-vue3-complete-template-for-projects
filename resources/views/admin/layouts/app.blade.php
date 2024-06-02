@@ -142,12 +142,12 @@
         // Faizullah Firozi. This code is only for ****START**** Collapse the SIDEBAR 
         document.addEventListener('DOMContentLoaded', () => {
             const toggleMenuIcon = document.getElementById('toggleMenuIcon');
-
             const body = document.querySelector('body');
 
             toggleMenuIcon.addEventListener('click', () => {
                 if (body.classList.contains('sidebar-collapse')) {
                     localStorage.setItem('sidebarState', 'expanded');
+
                 } else {
                     localStorage.setItem('sidebarState', 'collapse');
                 }

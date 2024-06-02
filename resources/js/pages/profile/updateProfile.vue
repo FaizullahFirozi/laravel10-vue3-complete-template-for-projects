@@ -241,7 +241,7 @@ onMounted(() => {
                                                 >
                                             </div>
                                         </div>
-                                        <div class="form-group row">
+                                          <div class="form-group row">
                                             <label
                                                 for="inputEmail"
                                                 class="col-sm-2 col-form-label"
@@ -449,5 +449,4 @@ onMounted(() => {
     background-color: rgb(43, 255, 0);
     cursor: pointer;
 }
-
 </style>

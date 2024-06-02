@@ -1,3 +1,28 @@
+<script setup>
+
+import { ref } from 'vue';
+
+const menuIcon = ref('fas fa-bars');
+
+const toggleMenu = () => {
+  if (menuIcon.value === 'fas fa-bars') {
+    menuIcon.value = 'fas fa-times'; // Change to cross icon
+  } else {
+    menuIcon.value = 'fas fa-bars'; // Change back to bars icon
+  }
+};
+
+const menuIconStyle = ref('fas fa-th-large');
+
+const styleSidebar = () => {
+  if (menuIconStyle.value === 'fas fa-th-large') {
+    menuIconStyle.value = 'fas fa-th'; // Change to cross icon
+  } else {
+    menuIconStyle.value = 'fas fa-th-large'; // Change back to bars icon
+  }
+};
+</script>
+
 <!-- <script setup>
     import { onMounted } from 'vue';
     onMounted(() => {
@@ -8,10 +33,9 @@
 <template>
     <!-- Left navbar links -->
     <ul class="navbar-nav">
-        <li class="nav-item" id="toggleMenuIcon">
-            <a class="nav-link" data-widget="pushmenu" href="#" role="button"
-                ><i class="fas fa-bars"></i
-            ></a>
+        <li class="nav-item" id="toggleMenuIcon" >
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button" @click.prevent="toggleMenu"
+                ><i :class="menuIcon"></i></a>
         </li>
         <li class="nav-item" id="themeModeFRZ">
             <a class="nav-link" href="#" role="button"
@@ -208,14 +232,14 @@
             </a>
         </li>
         <li class="nav-item">
-            <a
+            <a @click.prevent="styleSidebar"
                 class="nav-link"
                 data-widget="control-sidebar"
                 data-slide="true"
                 href="#"
                 role="button"
             >
-                <i class="fas fa-th-large"></i>
+                <i :class="menuIconStyle"></i>
             </a>
         </li>
     </ul>

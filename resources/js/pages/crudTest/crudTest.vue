@@ -91,8 +91,8 @@ const createUser = (values, { resetForm, setFieldError }) => {
                 error.response.data.errors.description
             );
 
-            if (error.response.status === 422) {
-                // toastr.error("validation error", "مشکل");
+            if (error.response.status === 422) { //422 VALIDATION ERROR
+                useToastrError()
             }
         })
         .finally(() => {
@@ -269,7 +269,7 @@ onMounted(() => {
             <div class="card">
                 <div class="card-header bg-dafault pt-4">
                     <button
-                        @click="addUser"
+                        @click.prevent="addUser"
                         type="button"
                         class="mb-2 btn btn-primary"
                         :disabled="loading_spinner"
@@ -419,11 +419,14 @@ onMounted(() => {
                             </tbody>
                             <tbody v-else>
                                 <tr>
-                                    <td colspan="6" align="center">
-                                        Company Inforamtion Not Found. معلومات
-                                        پیدا نه شول
+                                    <td colspan="7" align="center">
+                                        مهربانی وکړئ لږ انتظار شئ...
+                                        <div
+                                        class="spinner-border text-gray"
+                                    >
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
                                     </td>
-                                    <td></td>
                                 </tr>
                             </tbody>
                         </transition>
