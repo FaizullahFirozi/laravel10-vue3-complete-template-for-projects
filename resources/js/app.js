@@ -6,11 +6,13 @@ import 'admin-lte/plugins/bootstrap/js/bootstrap.bundle.min.js';
 import 'admin-lte/dist/js/adminlte.min.js';
 // import 'admin-lte/dist/js/demo.js';
 
+
 // for preloader
 import loader from 'vue3-ui-preloader';
 
 // FOR laravel-permission-to-vuejs
-import LaravelPermissionToVueJS from 'laravel-permission-to-vuejs'
+import LaravelPermissionToVueJS from 'laravel-permission-to-vuejs';
+import DatePicker from '@alireza-ab/vue3-persian-datepicker';
 
 
 
@@ -36,6 +38,7 @@ app.component('sidebar_vue', Sidebar);
 app.component('navbar_vue', Navbar);
 app.component('footer_vue', Footer);
 app.component('loader_vue', loader);
+app.component('DatePicker', DatePicker);
 
 // for login page
 app.component('Login_vue', Login);

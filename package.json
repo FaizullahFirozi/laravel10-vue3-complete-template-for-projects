@@ -11,6 +11,7 @@
         "vite": "^5.0.0"
     },
     "dependencies": {
+        "@alireza-ab/vue3-persian-datepicker": "^1.0.3",
         "@vitejs/plugin-vue": "^5.0.4",
         "admin-lte": "3.2",
         "laravel-permission-to-vuejs": "^3.0.2",

@@ -241,6 +241,9 @@ onMounted(() => {
                                                 >
                                             </div>
                                         </div>
+                                        <div>
+                                            <DatePicker />
+                                        </div>
                                           <div class="form-group row">
                                             <label
                                                 for="inputEmail"
