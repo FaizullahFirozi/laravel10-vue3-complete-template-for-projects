@@ -32,7 +32,6 @@ class UserFactory extends Factory
             'hire_date' => now(),
             'gross_salary' => fake()->numberBetween(1000, 100000),
             'phone' => fake()->unique()->phoneNumber(),
-            'photo' => 'image',
             'account_status' => 1,
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),

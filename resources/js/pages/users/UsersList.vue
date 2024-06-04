@@ -1,7 +1,7 @@
 <script setup>
 // import axios from "axios";
 import { ref, onMounted, reactive, watch, computed } from "vue";
-import { Form, Field } from "vee-validate";
+import { Form, Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
 
 import {
@@ -54,16 +54,22 @@ const sortBy = (field) => {
 // FRONTEND FORM VALIDATION FOR NEW ADD
 const createUserSchema = yup.object({
     name: yup.string().required().min(3),
-    last_name: yup.string().required().min(3),
-    father_name: yup.string().required().min(3),
-    dob: yup.string().required(),
-    hire_date: yup.string().required(),
-    nic: yup.string().required(),
+    last_name: yup.string().required().min(3).label("Last Name"),
+    father_name: yup.string().required().min(3).label("Father Name"),
+    dob: yup.string().required().label("Date Of Birth"),
+    hire_date: yup.string().required().label("Hire Date"),
+    nic: yup.string().required().label("National Identity"),
+    gross_salary: yup.string().required().label("Gross Salary"),
     phone: yup.string().required().min(10),
-    photo: yup.string().nullable(),
+    avatar: yup.string().nullable(),
     email: yup.string().email().required(),
     password: yup.string().required().min(5),
-    retype_password: yup.string().required().min(5),
+    retype_password: yup
+        .string()
+        .required()
+        .min(5)
+        .oneOf([yup.ref("password")], "Repty Password Not Match with Password")
+        .label("Retype Password"),
 });
 
 // FRONTEND FORM VALIDATION FOR UPDATE
@@ -74,14 +80,16 @@ const editUserSchema = yup.object({
     dob: yup.string().required(),
     hire_date: yup.string().required(),
     nic: yup.string().required(),
+    gross_salary: yup.string().required().label("Gross Salary"),
     phone: yup.string().required().min(10),
-    photo: yup.string().required(),
+    avatar: yup.string().required(),
     email: yup.string().email().required(),
-    // password: yup.string().required().min(5),
-    // retype_password: yup.string().required().min(5),
-    // password: yup.string().when((password, schema) => {
-    //     return password ? schema.required().min(8) : schema;
-    // })
+    password: yup.string().min(5),
+    retype_password: yup
+        .string()
+        .min(5)
+        .oneOf([yup.ref("password")], "Repty Password Not Match with Password")
+        .label("Retype Password"),
 });
 
 // STORING DATA TO DATABASE
@@ -96,15 +104,25 @@ const createUser = (values, { resetForm, setFieldError }) => {
             $("#userFormModal").modal("hide");
             users.value.data.unshift(response.data);
             resetForm();
-            // toastr.success("Added Successfull", "Success");
         })
         .catch((error) => {
+            useToastrError(error.response.data.message);
+
+            // setFieldError is for server vlidation response
             setFieldError("phone", error.response.data.errors.phone);
             setFieldError("email", error.response.data.errors.email);
             setFieldError("nic", error.response.data.errors.nic);
+            setFieldError("dob", error.response.data.errors.dob);
+            setFieldError("hire_date", error.response.data.errors.hire_date);
 
             if (error.response.status === 422) {
-                // toastr.error("validation error", "مشکل");
+                useSweetAlert("مبارک شه", "د کارمند معلومات تعغیر شول");
+            }
+            if (error.response.status === 500) {
+                useSweetAlert("مبارک شه", "د کارمند معلومات تعغیر شول");
+            }
+            if (error.response.status === 500) {
+                useSweetAlert("مبارک شه", "د کارمند معلومات تعغیر شول");
             }
         })
         .finally(() => {
@@ -131,7 +149,7 @@ const updateUser = (values, { setFieldError }) => {
             setFieldError("email", error.response.data.errors.email);
 
             if (error.response.status === 422) {
-                // useToastrError("مشکل", "validation error");
+                useToastrError("مشکل", "validation error");
             }
         })
         .finally(() => {
@@ -167,7 +185,8 @@ const editUser = (user) => {
         dob: user.dob,
         nic: user.nic,
         phone: user.phone,
-        photo: user.photo,
+        gross_salary: user.gross_salary,
+        avatar: user.avatar,
         email: user.email,
     });
 };
@@ -386,7 +405,16 @@ onMounted(() => {
                                     <td>{{ user.hire_date }}</td>
                                     <td>{{ user.gross_salary }}</td>
                                     <td>{{ user.phone }}</td>
-                                    <td>{{ user.photo }}</td>
+                                    <td>
+                                        <img v-if="user.email === 'super_admin@gmail.com'  || user.email ===  'admin@gmail.com' || user.email ===  'user@gmail.com'"
+                                            class="profile-user-img img-fluid img-circle img-md"
+                                            :src="user.avatar"
+                                        />
+                                        <img v-else
+                                            class="profile-user-img img-fluid img-circle img-md"
+                                            :src="'/logo.png'"
+                                        />
+                                    </td>
                                     <td>{{ user.account_status }}</td>
                                     <td>{{ user.email }}</td>
                                     <td>
@@ -438,11 +466,11 @@ onMounted(() => {
                                 <tr>
                                     <td colspan="13" align="center">
                                         مهربانی وکړئ لږ انتظار شئ...
-                                        <div
-                                        class="spinner-border text-gray"
-                                    >
-                                        <span class="sr-only">Loading...</span>
-                                    </div>
+                                        <div class="spinner-border text-gray">
+                                            <span class="sr-only"
+                                                >Loading...</span
+                                            >
+                                        </div>
                                     </td>
                                 </tr>
                             </tbody>
@@ -493,7 +521,7 @@ onMounted(() => {
         id="userFormModal"
         data-backdrop="static"
         data-keyboard="false"
-        tabindex="-1"   
+        tabindex="-1"
         aria-labelledby="staticBackdropLabel"
         aria-hidden="true"
     >
@@ -542,9 +570,11 @@ onMounted(() => {
                                     :class="{ 'is-invalid': errors.name }"
                                     placeholder="Enter Name نوم"
                                 />
-                                <span class="invalid-feedback">{{
-                                    errors.name
-                                }}</span>
+                                <ErrorMessage
+                                    name="name"
+                                    class="invalid-feedback"
+                                    as="strong"
+                                />
                             </div>
                             <div class="form-group col-lg-4">
                                 <label>Last Name</label>
@@ -555,9 +585,10 @@ onMounted(() => {
                                     :class="{ 'is-invalid': errors.last_name }"
                                     placeholder="Enter Last Name تخلص"
                                 />
-                                <span class="invalid-feedback">{{
-                                    errors.last_name
-                                }}</span>
+                                <ErrorMessage
+                                    name="last_name"
+                                    class="invalid-feedback"
+                                />
                             </div>
                             <div class="form-group col-lg-4">
                                 <label>Father Name</label>
@@ -570,12 +601,13 @@ onMounted(() => {
                                     }"
                                     placeholder="Enter Father Name پلار نوم"
                                 />
-                                <span class="invalid-feedback">{{
-                                    errors.father_name
-                                }}</span>
+                                <ErrorMessage
+                                    name="father_name"
+                                    class="invalid-feedback"
+                                />
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row col-lg-12">
                             <div class="form-group col-lg-4">
                                 <label>Phone</label>
                                 <Field
@@ -585,9 +617,10 @@ onMounted(() => {
                                     :class="{ 'is-invalid': errors.phone }"
                                     placeholder="Enter Phone Number د اړیکی شمیره"
                                 />
-                                <span class="invalid-feedback">{{
-                                    errors.phone
-                                }}</span>
+                                <ErrorMessage
+                                    name="phone"
+                                    class="invalid-feedback"
+                                />
                             </div>
                             <div class="form-group col-lg-4">
                                 <label>Email:</label>
@@ -598,81 +631,66 @@ onMounted(() => {
                                     :class="{ 'is-invalid': errors.email }"
                                     placeholder="Enter email ایمیل"
                                 />
-                                <span class="invalid-feedback">{{
-                                    errors.email
-                                }}</span>
+                                <ErrorMessage
+                                    name="email"
+                                    class="invalid-feedback"
+                                />
                             </div>
                             <div class="form-group col-lg-4">
                                 <label>Image</label>
                                 <Field
-                                    name="photo"
+                                    name="avatar"
                                     type="file"
                                     accept="image/*"
                                     class="form-control"
-                                    :class="{ 'is-invalid': errors.photo }"
+                                    :class="{ 'is-invalid': errors.avatar }"
                                 />
-                                <span class="invalid-feedback">{{
-                                    errors.photo
-                                }}</span>
+                                <ErrorMessage
+                                    name="avatar"
+                                    class="invalid-feedback"
+                                />
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Password</label>
-                            <Field
-                                name="password"
-                                type="password"
-                                class="form-control"
-                                :class="{ 'is-invalid': errors.password }"
-                                placeholder="Enter password"
-                            />
-                            <span class="invalid-feedback">{{
-                                errors.password
-                            }}</span>
-                        </div>
-                        <div class="form-group">
-                            <label>Retype Password</label>
-                            <Field
-                                name="retype_password"
-                                type="password"
-                                class="form-control"
-                                :class="{
-                                    'is-invalid': errors.retype_password,
-                                }"
-                                placeholder="Enter Retype password"
-                            />
-                            <span class="invalid-feedback">{{
-                                errors.retype_password
-                            }}</span>
                         </div>
                     </div>
                     <div class="row col-lg-12">
                         <div class="form-group col-lg-4">
                             <label>Date Of B</label>
-                            <Field
+                            <Field name="dob" type="date" v-slot="{ field }">
+                                <date-picker
+                                    :column="1"
+                                    mode="single"
+                                    v-bind="field"
+                                    format="YYYY"
+                                    required
+                                    class="no border"
+                                    :class="{
+                                        'border border-danger': errors.dob,
+                                    }"
+                                />
+                            </Field>
+                            <ErrorMessage
                                 name="dob"
-                                type="text"
-                                class="form-control"
-                                :class="{ 'is-invalid': errors.dob }"
+                                class="text-purple text-sm"
                             />
-                            <date-picker :modal="true" shortcut :auto-submit="false" />
-                            <date-picker :modal="true"  color="purple" :column="1" mode="single" placeholder="تاریخ تولد"></date-picker>
-
-                            <span class="invalid-feedback">{{
-                                errors.dob
-                            }}</span>
-                                     
                         </div>
                         <div class="form-group col-lg-4">
                             <label>Hire Date</label>
-                            <Field
+                            <Field name="hire_date" v-slot="{ field }">
+                                <date-picker
+                                    :column="1"
+                                    mode="single"
+                                    v-bind="field"
+                                    class="no border"
+                                    :class="{
+                                        'border border-danger':
+                                            errors.hire_date,
+                                    }"
+                                />
+                            </Field>
+                            <ErrorMessage
                                 name="hire_date"
-                                type="date"
-                                class="form-control"
-                                :class="{ 'is-invalid': errors.hire_date }"
+                                class="text-pink text-sm"
                             />
-                            <span class="invalid-feedback">{{
-                                errors.hire_date
-                            }}</span>
                         </div>
                         <div class="form-group col-lg-4">
                             <label>NIC تذکره</label>
@@ -683,9 +701,58 @@ onMounted(() => {
                                 :class="{ 'is-invalid': errors.nic }"
                                 placeholder="نمبر تذکره"
                             />
-                            <span class="invalid-feedback">{{
-                                errors.nic
-                            }}</span>
+                            <ErrorMessage name="nic" class="invalid-feedback" />
+                        </div>
+                    </div>
+
+                    <div class="row col-lg-12">
+                        <div class="form-group col-lg-4">
+                            <label>Gross Salary</label>
+                            <Field
+                                name="gross_salary"
+                                type="number"
+                                class="form-control"
+                                :class="{ 'is-invalid': errors.gross_salary }"
+                                placeholder="Enter Gross Salary"
+                            />
+                            <ErrorMessage
+                                name="gross_salary"
+                                class="invalid-feedback"
+                            />
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label>Password</label>
+                            <Field
+                                name="password"
+                                type="password"
+                                rules="required"
+                                class="form-control"
+                                :class="{ 'is-invalid': errors.password }"
+                                placeholder="Enter password"
+                                autocomplete
+                            />
+                            <ErrorMessage
+                                name="password"
+                                class="invalid-feedback"
+                            />
+                        </div>
+
+                        <div class="form-group col-lg-4">
+                            <label>Retype Password</label>
+                            <Field
+                                name="retype_password"
+                                type="password"
+                                class="form-control"
+                                :class="{
+                                    'is-invalid': errors.retype_password,
+                                }"
+                                placeholder="Enter Retype password"
+                                autocomplete
+                            />
+                            <ErrorMessage
+                                name="retype_password"
+                                class="invalid-feedback"
+                            />
                         </div>
                     </div>
 
@@ -748,3 +815,12 @@ onMounted(() => {
     transition: all 1s ease;
 }
 </style>
+
+
+<style>
+.profile-user-img:hover {
+    background-color: rgb(43, 255, 0);
+    cursor: pointer;
+}
+</style>
+

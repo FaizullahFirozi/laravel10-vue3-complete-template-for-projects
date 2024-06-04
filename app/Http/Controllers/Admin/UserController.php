@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -29,8 +29,10 @@ class UserController extends Controller
         // $users = User::latest()->get();
 
         $perPage = request('per_page', 10);
-        $users = User::latest()->paginate($perPage);
-   
+        $users = User::latest()
+        ->orderBy('id', 'desc')
+        ->paginate($perPage);
+
         return response()->json($users);
     }
 
@@ -83,33 +85,36 @@ class UserController extends Controller
     public function store(Request $request)
     {
 
-        $dataValide = request()->validate([
+        $dataValide = $request->validate([
             'name' => 'required',
             'last_name' => 'required',
             'father_name' => 'required',
-            'nic' => 'required|unique:users,nic',
-            'hire_date' => 'required',
-            'phone' => 'required|unique:users,phone|min:10',
-            'email' => 'required|unique:users,email|max:128',
+            'nic' => 'unique:users,nic',
+            'hire_date' => 'date',
+            // 'dob' => 'date',
+            'phone' => 'unique:users,phone|min:10',
+            'email' => 'unique:users,email|max:128',
         ]);
 
 
         if ($dataValide) {
 
-            return User::create([
-                'name' => request('name'),
+            $users = User::create([
+                'name' => $request->name,
                 'last_name' => request('last_name'),
                 'father_name' => request('father_name'),
-                'dob' => 2011,
+                'dob' => request('dob'),
                 'nic' => request('nic'),
                 'hire_date' => request('hire_date'),
-                'gross_salary' => 12000,
+                'gross_salary' => request('gross_salary'),
                 'phone' => request('phone'),
-                'photo' => 'photo',
+                // 'avatar' => request('avatar'),
                 'account_status' => 0,
                 'email' => request('email'),
                 'password' => bcrypt(request('password')),
             ]);
+
+            return response()->json($users);
         }
     }
 
@@ -132,7 +137,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(User $user)
+    public function update(Request $request, $id)
     {
 
         $dataValide = request()->validate([
@@ -140,30 +145,32 @@ class UserController extends Controller
             'last_name' => 'required',
             'father_name' => 'required',
             'nic' => 'required',
-            'hire_date' => 'required',
-            'phone' => 'required|unique:users,phone, ' . $user->id, '|min:10',
-            'email' => 'required|unique:users,email, ' . $user->id, '|max:128',
+            'phone' => 'required|unique:users,phone,' . $id, '|min:10',
+            'email' => 'required|unique:users,email,' . $id, '|max:128',
         ]);
 
 
         if ($dataValide) {
+         
+            $employee = User::findOrFail($id);
+            $employee->name = $request->name;
+            $employee->last_name = $request->last_name;
+            $employee->father_name = $request->father_name;
+            $employee->dob = $request->dob;
+            $employee->nic = $request->nic;
+            $employee->hire_date = $request->hire_date;
+            $employee->gross_salary = $request->gross_salary;
+            $employee->phone = $request->phone;
+            // $employee->avatar = $request->avatar;
+            $employee->account_status = 0;
+            // $employee->account_status = (Auth::user()->id == $id) ? User::find($id)->account_status : $request->account_status;
+            $employee->email = $request->email;
+            $employee->password = $request->password ? bcrypt($request->password) : $employee->password;
+           
+            $employee->update();
 
-            $user->update([
-                'name' => request('name'),
-                'last_name' => request('last_name'),
-                'father_name' => request('father_name'),
-                'dob' => 2011,
-                'nic' => request('nic'),
-                'hire_date' => request('hire_date'),
-                'gross_salary' => 12000,
-                'phone' => request('phone'),
-                'photo' => 'photo',
-                'account_status' => 0,
-                'email' => request('email'),
-                'password' => request('password') ? bcrypt(request('password')) : $user->password,
-            ]);
 
-            return $user;
+            return response()->json($employee);
         }
     }
 
@@ -172,7 +179,7 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        return 'ruojsdlkf';
+        // return 'ruojsdlkf';
         $this->authorize('user-delete');
 
         $user->delete();

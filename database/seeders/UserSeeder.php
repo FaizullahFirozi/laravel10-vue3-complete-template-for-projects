@@ -22,7 +22,7 @@ class UserSeeder extends Seeder
         //     'hire_date' => '2010-03-04',
         //     'email' => 'admin@gmail.com',
         //     'phone' => '0780002528',
-        //     'photo' => 'تصویر',
+        //     'avatar' => 'تصویر',
         //     'account_status' => 1,
         //     'password' => bcrypt('admin123'),
         // ];

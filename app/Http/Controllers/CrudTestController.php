@@ -48,33 +48,39 @@ class CrudTestController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CrudTest $crudTest)
+    public function store(Request $request)
     {
 
-        $dataValide = request()->validate([
+        $dataValide = $request->validate([
             'name' => 'required',
-            'phone' => 'required|unique:crud_tests,phone|min:10',
+            'phone' => 'required|unique:crud_tests,phone|min:10|max:10',
             'email' => 'required|unique:crud_tests,email|max:128',
             'description' => 'required|min:2',
         ]);
 
 
         if ($dataValide) {
-            $crudTest = CrudTest::create([
-                'name' => request('name'),
-                'email' => request('email'),
-                'phone' => request('phone'),
-                'description' => request('description'),
-            ]);
 
-            return response()->json($crudTest);
+            $data = $request->all();
+            $record = CrudTest::create($data);
+
+            return response()->json($record);
+
+
+            // $crudTest = CrudTest::create([ // if you like this mode
+            //     'name' => request('name'),
+            //     'email' => request('email'),
+            //     'phone' => request('phone'),
+            //     'description' => request('description'),
+            // ]);
+            // return response()->json($crudTest);
         }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(CrudTest $crudTest)
+    public function show($id)
     {
         //
     }
@@ -82,7 +88,7 @@ class CrudTestController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(CrudTest $crudTest)
+    public function edit(Request $request)
     {
         //
     }
@@ -90,37 +96,35 @@ class CrudTestController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(CrudTest $crudTest)
+    public function update(Request $request, $id)
     {
-        $dataValide = request()->validate([
+
+        $dataValide = $request->validate([
             'name' => 'required',
-            'phone' => 'required|unique:crud_tests,phone' . $crudTest->id, '|min:10',
-            'email' => 'required|unique:crud_tests,email' . $crudTest->id, '|max:128',
+            'phone' => 'required|unique:crud_tests,phone,' . $id, '|min:10|max:10',
+            'email' => 'required|unique:crud_tests,email,' . $id, '|max:128',
             'description' => 'required|min:2',
         ]);
 
 
         if ($dataValide) {
+            $data = $request->all();
+            $record = CrudTest::findOrFail($id);
+            $record->update($data);
 
-            $crudTest->update([
-                'name' => request('name'),
-                'phone' => request('phone'),
-                'email' => request('email'),
-            ]);
-
-            return response()->json($crudTest);
+            return response()->json($record);
         }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(CrudTest $crudTest)
+    public function destroy($id)
     {
 
-        $this->authorize('user-delete');
+        $record = CrudTest::findOrFail($id);
+        $record->delete();
 
-        $crudTest->delete();
         return response()->noContent();
     }
 }

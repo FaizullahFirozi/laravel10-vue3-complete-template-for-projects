@@ -23,7 +23,7 @@ return new class extends Migration
             // $table->foreignId('district_id');  // مانده ««««««««««««»»
             $table->integer('gross_salary')->nullable();
             $table->string('phone')->unique()->nullable();
-            $table->string('photo')->nullable();
+            // $table->string('avatar')->nullable(); //added from avatarfield 
             $table->tinyInteger('account_status')->default(0);
             $table->string('email')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();

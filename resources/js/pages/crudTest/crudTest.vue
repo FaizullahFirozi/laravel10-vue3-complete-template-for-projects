@@ -23,7 +23,6 @@ const form = ref(null);
 const loading_spinner = ref(false);
 const loading_spinner_submit = ref(false);
 
-
 // GETTING DATA FROM DATABASE TO SHOW
 const getCrudTest = (page = 1, per_Page = perPage.value) => {
     axios
@@ -75,7 +74,6 @@ const createUser = (values, { resetForm, setFieldError }) => {
     axios
         .post("/api/crudtest", values)
         .then((response) => {
-
             $("#userFormModal").modal("hide");
             crud_data.value.data.unshift(response.data);
             resetForm();
@@ -91,8 +89,9 @@ const createUser = (values, { resetForm, setFieldError }) => {
                 error.response.data.errors.description
             );
 
-            if (error.response.status === 422) { //422 VALIDATION ERROR
-                useToastrError()
+            if (error.response.status === 422) {
+                //422 VALIDATION ERROR
+                useToastrError();
             }
         })
         .finally(() => {
@@ -127,7 +126,7 @@ const updateUser = (values, { setFieldError }) => {
         });
 };
 
-// SHOW MODAL FOR ADDING 
+// SHOW MODAL FOR ADDING
 const addUser = () => {
     loading_spinner.value = true;
 
@@ -175,19 +174,18 @@ const confirmUserDeletion = (id) => {
         cancelButtonColor: "#d33",
         confirmButtonText: "هو Yes",
         cancelButtonText: "نه No",
-    })
-        .then((result) => {
-            if (result.isConfirmed) {
-                axios.delete(`/api/crudtest/${id}`).then((response) => {
-                    crud_data.value.data = crud_data.value.data.filter(
-                        (user) => user.id !== id
-                    );
-                    // getUsers(); // FOR TOTAL COUNT AGAIN
+    }).then((result) => {
+        if (result.isConfirmed) {
+            axios.delete(`/api/crudtest/${id}`).then((response) => {
+                crud_data.value.data = crud_data.value.data.filter(
+                    (user) => user.id !== id
+                );
+                // getUsers(); // FOR TOTAL COUNT AGAIN
 
-                    useSweetAlert("حذف شو!");
-                });
-            }
-        });
+                useSweetAlert("حذف شو!");
+            });
+        }
+    });
 };
 
 // FOR SEARCH
@@ -236,7 +234,6 @@ watch(perPage, () => {
 onMounted(() => {
     getCrudTest();
 });
-
 </script>
 <template>
     <!-- Content Header (Page header) -->
@@ -421,11 +418,11 @@ onMounted(() => {
                                 <tr>
                                     <td colspan="7" align="center">
                                         مهربانی وکړئ لږ انتظار شئ...
-                                        <div
-                                        class="spinner-border text-gray"
-                                    >
-                                        <span class="sr-only">Loading...</span>
-                                    </div>
+                                        <div class="spinner-border text-gray">
+                                            <span class="sr-only"
+                                                >Loading...</span
+                                            >
+                                        </div>
                                     </td>
                                 </tr>
                             </tbody>
@@ -520,6 +517,25 @@ onMounted(() => {
                                     errors.name
                                 }}</span>
                             </div>
+
+                            <Field name="password" v-slot="{ field }">
+                                <!-- <input v-bind="field" type="password" /> -->
+                                <date-picker
+                                    v-bind="field"
+                                    :modal="true"
+                                    color="purple"
+                                    :column="1"
+                                    mode="single"
+                                    placeholder="تاریخ تولد"
+                                ></date-picker>
+                            </Field>
+                            <date-picker
+                                :modal="true"
+                                color="purple"
+                                :column="1"
+                                mode="single"
+                                placeholder="az تاریخ تولد"
+                            ></date-picker>
                         </div>
                         <div class="row">
                             <div class="form-group col-lg-4">

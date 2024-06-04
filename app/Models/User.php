@@ -60,7 +60,6 @@ class User extends Authenticatable
         'hire_date',
         'gross_salary',
         'phone',
-        'photo',
         'avatar',
         'account_status',
         'email',
