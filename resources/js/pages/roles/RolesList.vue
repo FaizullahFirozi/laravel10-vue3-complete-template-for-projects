@@ -4,7 +4,6 @@ import { ref, onMounted } from "vue";
 import { useSweetAlert } from "@/components/toastr.js";
 import Swal from "sweetalert2";
 
-
 const roles = ref([]);
 
 const getRoles = () => {
@@ -12,7 +11,6 @@ const getRoles = () => {
         roles.value = response.data;
     });
 };
-
 
 // FOR SHOW PERMISSIONS
 const role = ref(null);
@@ -29,7 +27,6 @@ const showRolePermissions = async (id) => {
         loading.value = false; // Stop loading spinner
     }
 };
-
 
 // THIS IS ONLY FOR TEST NOT REAL DELETE DATA
 const confirmRoleDeletion = (id) => {
@@ -49,8 +46,14 @@ const confirmRoleDeletion = (id) => {
     });
 };
 
+const showTableRow = ref(true); //FOR SHOW EMPTY rows
+
 onMounted(() => {
     getRoles();
+
+    setTimeout(() => {
+        showTableRow.value = false;
+    }, 5000);
 });
 </script>
 
@@ -208,25 +211,25 @@ onMounted(() => {
                                         Delete
                                     </a>
                                 </td>
-                                <td
-                                    v-if="item.id === 1"
-                                    class="text-center"
-                                >
-                                <small>
-                                    د Super Admin قوانین نه تغیر کیږی 
-                                </small>
+                                <td v-if="item.id === 1" class="text-center">
+                                    <small>
+                                        د Super Admin قوانین نه تغیر کیږی
+                                    </small>
                                 </td>
                             </tr>
                         </tbody>
                         <tbody v-else>
-                            <tr>
+                            <tr v-if="showTableRow">
                                 <td colspan="13" align="center">
                                     مهربانی وکړئ لږ انتظار شئ...
-                                    <div
-                                        class="spinner-border text-pink"
-                                    >
+                                    <div class="spinner-border text-pink">
                                         <span class="sr-only">Loading...</span>
                                     </div>
+                                </td>
+                            </tr>
+                            <tr v-else>
+                                <td colspan="13" align="center">
+                                    معلومات پیدا نشول...
                                 </td>
                             </tr>
                         </tbody>

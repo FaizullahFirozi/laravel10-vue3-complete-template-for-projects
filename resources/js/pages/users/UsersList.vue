@@ -246,7 +246,12 @@ const clearSearch = () => {
     }
 };
 
+
+const showTableRow = ref(true); //FOR SHOW EMPTY rows
+
 const search = () => {
+    showTableRow.value = true;
+
     axios
         .get("/api/users/search", {
             params: {
@@ -259,6 +264,11 @@ const search = () => {
         })
         .catch((error) => {
             console.log(error);
+        })
+        .finally(() => {
+            setTimeout(() => {
+                showTableRow.value = false;
+            }, 1000);
         });
 };
 
@@ -275,6 +285,10 @@ watch(perPage, () => {
 
 onMounted(() => {
     getUsers();
+
+    setTimeout(() => {
+    showTableRow.value = false;
+  }, 5000);
 });
 </script>
 
@@ -463,7 +477,7 @@ onMounted(() => {
                                 </tr>
                             </tbody>
                             <tbody v-else>
-                                <tr>
+                                <tr v-if="showTableRow">
                                     <td colspan="13" align="center">
                                         مهربانی وکړئ لږ انتظار شئ...
                                         <div class="spinner-border text-gray">
@@ -471,6 +485,11 @@ onMounted(() => {
                                                 >Loading...</span
                                             >
                                         </div>
+                                    </td>
+                                </tr>
+                                <tr v-else>
+                                    <td colspan="13" align="center">
+                                        معلومات پیدا نشول...
                                     </td>
                                 </tr>
                             </tbody>

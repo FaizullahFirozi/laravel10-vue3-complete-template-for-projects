@@ -1,41 +1,54 @@
 <script setup>
+import { ref, onMounted } from "vue";
 
-import { ref } from 'vue';
-
-const menuIcon = ref('fas fa-bars');
+const menuIcon = ref("fas fa-bars");
 
 const toggleMenu = () => {
-  if (menuIcon.value === 'fas fa-bars') {
-    menuIcon.value = 'fas fa-times'; // Change to cross icon
-  } else {
-    menuIcon.value = 'fas fa-bars'; // Change back to bars icon
-  }
+    if (menuIcon.value === "fas fa-bars") {
+        menuIcon.value = "fas fa-times"; // Change to cross icon
+    } else {
+        menuIcon.value = "fas fa-bars"; // Change back to bars icon
+    }
 };
 
-const menuIconStyle = ref('fas fa-th-large');
+const menuIconStyle = ref("fas fa-th-large");
 
 const styleSidebar = () => {
-  if (menuIconStyle.value === 'fas fa-th-large') {
-    menuIconStyle.value = 'fas fa-th'; // Change to cross icon
-  } else {
-    menuIconStyle.value = 'fas fa-th-large'; // Change back to bars icon
-  }
+    if (menuIconStyle.value === "fas fa-th-large") {
+        menuIconStyle.value = "fas fa-th"; // Change to cross icon
+    } else {
+        menuIconStyle.value = "fas fa-th-large"; // Change back to bars icon
+    }
 };
-</script>
 
-<!-- <script setup>
-    import { onMounted } from 'vue';
-    onMounted(() => {
-        document.cookie = 'locale=PS';
-    });
-</script> -->
+const changeLanguage = (lang) => {
+    if (lang === "EN") {
+        document.cookie = "locale=EN=";
+    } else if (lang === "FA") {
+        document.cookie = "locale=FA=";
+    } else if (lang === "PS") {
+        document.cookie = "locale=PS=";
+    }
+    // window.location.reload();
+};
+
+onMounted(() => {
+    // document.cookie = 'locale=FA='
+});
+</script>
 
 <template>
     <!-- Left navbar links -->
     <ul class="navbar-nav">
-        <li class="nav-item" id="toggleMenuIcon" >
-            <a class="nav-link" data-widget="pushmenu" href="#" role="button" @click.prevent="toggleMenu"
-                ><i :class="menuIcon"></i></a>
+        <li class="nav-item" id="toggleMenuIcon">
+            <a
+                class="nav-link"
+                data-widget="pushmenu"
+                href="#"
+                role="button"
+                @click.prevent="toggleMenu"
+                ><i :class="menuIcon"></i
+            ></a>
         </li>
         <li class="nav-item" id="themeModeFRZ">
             <a class="nav-link" href="#" role="button"
@@ -214,15 +227,35 @@ const styleSidebar = () => {
             <a class="nav-link" data-toggle="dropdown" href="#">
                 <i class="flag-icon flag-icon-sa"></i>
             </a>
-            <div class="dropdown-menu dropdown-menu-left p-0">
-                <a href="#" @click="$i18n.locale = `PS`" class="dropdown-item">
-                    <i class="flag-icon flag-icon-af ml-2"></i> Pashto
+            <div class="dropdown-menu dropdown-menu-left p-0 text-center">
+                <a
+                    href="#"
+                    @click.prevent="changeLanguage((lang = 'PS'))"
+                    class="dropdown-item"
+                >
+                    <span @click="$i18n.locale = `PS`">
+                    <i class="flag-icon flag-icon-af ml-2"></i>
+                         Pashto </span>
                 </a>
-                <a href="#" @click="$i18n.locale = `DR`" class="dropdown-item">
-                    <i class="flag-icon flag-icon-tj ml-2"></i> Dari
+                <a
+                    href="#"
+                    @click.prevent="changeLanguage((lang = 'FA'))"
+                    class="dropdown-item"
+                >
+                    <span @click="$i18n.locale = `FA`">
+                        <i class="flag-icon flag-icon-tj ml-2"></i>
+                        Dari
+                    </span>
                 </a>
-                <a href="#" @click="$i18n.locale = `EN`" class="dropdown-item">
-                    <i class="flag-icon flag-icon-us ml-2"></i> English
+                <a
+                    href="#"
+                    @click.prevent="changeLanguage((lang = 'EN'))"
+                    class="dropdown-item"
+                >
+                    <span @click="$i18n.locale = `EN`">
+                        <i class="flag-icon flag-icon-us ml-2"></i>
+                        English
+                    </span>
                 </a>
             </div>
         </li>
@@ -232,7 +265,8 @@ const styleSidebar = () => {
             </a>
         </li>
         <li class="nav-item">
-            <a @click.prevent="styleSidebar"
+            <a
+                @click.prevent="styleSidebar"
                 class="nav-link"
                 data-widget="control-sidebar"
                 data-slide="true"

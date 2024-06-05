@@ -1,7 +1,16 @@
 {
-    "___COMMENT___": "-----------SIDEBAR_SECTION-----------",
+    "___SIDEBAR_SECTION___": "-----------SIDEBAR_SECTION-----------",
     
-    "dashboard": "میلمه",
-    "home": "کور",
+    "dashboard": "دشبورډ",
+    "dashboard2": "دوهم دشبورد",
+    "users": "کارکوونکي",
+    "profile": "پروفایل",
+    "roles": "قانون",
+    "activity_log": "د فعالیتونو لاگ",
+
+    "___NAVBAR_SECTION___": "-----------NAVBAR_SECTION-----------",
+
+    "home": "اصلي پاڼه",
+
     "test_localizition": "د کارت په سرلیک کې د جوړولو لپاره ځینې ګړندي مثال متن او د کارت مینځپانګې لویه برخه جوړوي."
 }

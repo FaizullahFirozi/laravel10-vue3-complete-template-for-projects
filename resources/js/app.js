@@ -30,7 +30,7 @@ import { createApp } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import Routes from './routes.js';
 
-import i18n from './lang/locale.js';
+import i18n from './lang/z_locale.js';
 
 const app = createApp({});
 // FOR MASTER PAGE

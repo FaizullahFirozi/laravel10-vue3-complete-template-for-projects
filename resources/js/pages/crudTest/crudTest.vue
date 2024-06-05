@@ -1,6 +1,6 @@
 <script setup>
 // import axios from "axios";
-import { ref, onMounted, reactive, watch, computed } from "vue";
+import { ref, onMounted, watch, computed } from "vue";
 import { Form, Field } from "vee-validate";
 import * as yup from "yup";
 
@@ -31,6 +31,7 @@ const getCrudTest = (page = 1, per_Page = perPage.value) => {
             crud_data.value = response.data;
         });
 };
+
 
 // FOR SORTING ID AND NAME IN TABLE
 let sortOrder = "asc"; // Initial sort order
@@ -203,8 +204,11 @@ const clearSearch = () => {
         searchQuery.value = "";
     }
 };
+const showTableRow = ref(true); //FOR SHOW EMPTY rows
 
 const search = () => {
+    showTableRow.value = true;
+
     axios
         .get("/api/crudtest/search", {
             params: {
@@ -217,6 +221,11 @@ const search = () => {
         })
         .catch((error) => {
             console.log(error);
+        })
+        .finally(() => {
+            setTimeout(() => {
+                showTableRow.value = false;
+            }, 1000);
         });
 };
 
@@ -231,8 +240,13 @@ watch(perPage, () => {
     search();
 });
 
+
 onMounted(() => {
     getCrudTest();
+    
+    setTimeout(() => {
+    showTableRow.value = false;
+  }, 5000);
 });
 </script>
 <template>
@@ -415,7 +429,7 @@ onMounted(() => {
                                 </tr>
                             </tbody>
                             <tbody v-else>
-                                <tr>
+                                <tr v-if="showTableRow">
                                     <td colspan="7" align="center">
                                         مهربانی وکړئ لږ انتظار شئ...
                                         <div class="spinner-border text-gray">
@@ -423,6 +437,11 @@ onMounted(() => {
                                                 >Loading...</span
                                             >
                                         </div>
+                                    </td>
+                                </tr>
+                                <tr v-else>
+                                    <td colspan="7" align="center">
+                                        معلومات پیدا نشول...
                                     </td>
                                 </tr>
                             </tbody>

@@ -1,7 +1,17 @@
 {
-    "___COMMENT___": "-----------SIDEBAR_SECTION-----------",
+    "___SIDEBAR_SECTION___": "-----------SIDEBAR_SECTION-----------",
    
-    "dashboard": "Dashboard",
-    "home": "Home",
+    "dashboard": "Dashboard", 
+    "dashboard2": "Dashboard2",
+    "users": "Employees",
+    "profile": "Profile",
+    "roles": "Roles",
+    "activity_log": "Activity Log",
+
+    "___NAVBAR_SECTION___": "-----------NAVBAR_SECTION-----------",
+
+    "home": "Main Page",
+
+
     "test_localizition": "Some quick example text to build on the card title and make up the bulk of the card's content."
 }

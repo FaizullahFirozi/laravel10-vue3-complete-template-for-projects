@@ -101,7 +101,7 @@ export default {
                     class="nav-link"
                 >
                     <i class="nav-icon fas fa-tachometer-alt"></i>
-                    <p>Dashboard</p>
+                    <p>{{ $t('dashboard') }}</p>
                 </router-link>
             </li>
             <li class="nav-item">
@@ -111,7 +111,7 @@ export default {
                     class="nav-link"
                 >
                     <i class="nav-icon fas fa-tachometer-alt"></i>
-                    <p>Dashboard 2</p>
+                    <p>{{ $t('dashboard2') }}</p>
                 </router-link>
             </li>
             <li class="nav-item">
@@ -130,7 +130,7 @@ export default {
                     active-class="active"
                     class="nav-link"
                     ><i class="nav-icon fa fa-user"></i>
-                    <p>Users</p>
+                    <p>{{ $t('users') }}</p>
                 </router-link>
             </li>
             <li class="nav-item">
@@ -139,7 +139,7 @@ export default {
                     active-class="active"
                     class="nav-link"
                     ><i class="nav-icon fa fa-user"></i>
-                    <p>Profile</p>
+                    <p>{{ $t('profile') }}</p>
                 </router-link>
             </li>
             <li class="nav-item">
@@ -148,7 +148,7 @@ export default {
                     active-class="active"
                     class="nav-link"
                     ><i class="nav-icon fa fa-user"></i>
-                    <p>Roles</p>
+                    <p>{{ $t('roles') }}</p>
                 </router-link>
             </li>
             <li class="nav-item">
@@ -157,7 +157,7 @@ export default {
                     active-class="active"
                     class="nav-link"
                     ><i class="nav-icon fa fa-book"></i>
-                    <p>Activity Log</p>
+                    <p>{{ $t('activity_log') }}</p>
                 </router-link>
             </li>
 

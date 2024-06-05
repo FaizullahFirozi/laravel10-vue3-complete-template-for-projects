@@ -52,7 +52,10 @@ const clearSearch = () => {
     }
 };
 
+const showTableRow = ref(true); //FOR SHOW EMPTY rows
+
 const search = () => {
+    showTableRow.value = true;
     axios
         .get("/api/activity_log/search", {
             params: {
@@ -65,6 +68,11 @@ const search = () => {
         })
         .catch((error) => {
             console.log(error);
+        })
+        .finally(() => {
+            setTimeout(() => {
+                showTableRow.value = false;
+            }, 1000);
         });
 };
 
@@ -81,6 +89,10 @@ watch(perPage, () => {
 
 onMounted(() => {
     fetchActivityLog();
+
+    setTimeout(() => {
+        showTableRow.value = false;
+    }, 5000);
 });
 
 // CREATED BY FRZ FOR ONLY SHOW 10 CARACTAR DATA
@@ -158,10 +170,14 @@ function formatDate(dateString) {
                     >
                         <thead class="bg-secondary">
                             <tr>
-                                <th style="width: 10px" @click="sortBy('id')"> ID <i class="fas fa-sort"></i></th>
+                                <th style="width: 10px" @click="sortBy('id')">
+                                    ID <i class="fas fa-sort"></i>
+                                </th>
                                 <th>User Name</th>
                                 <th>Changes Table</th>
-                                <th @click="sortBy('description')">Log Name <i class="fas fa-sort"></i></th>                               
+                                <th @click="sortBy('description')">
+                                    Log Name <i class="fas fa-sort"></i>
+                                </th>
                                 <th>DATE</th>
                                 <th class="text-left">New Data</th>
                                 <th class="text-left">Old Data</th>
@@ -206,14 +222,19 @@ function formatDate(dateString) {
                                 </tr>
                             </tbody>
                             <tbody v-else>
-                                <tr>
+                                <tr v-if="showTableRow">
                                     <td colspan="13" align="center">
                                         مهربانی وکړئ لږ انتظار شئ...
-                                        <div
-                                        class="spinner-border text-gray"
-                                    >
-                                        <span class="sr-only">Loading...</span>
-                                    </div>
+                                        <div class="spinner-border text-gray">
+                                            <span class="sr-only"
+                                                >Loading...</span
+                                            >
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr v-else>
+                                    <td colspan="13" align="center">
+                                        معلومات پیدا نشول...
                                     </td>
                                 </tr>
                             </tbody>

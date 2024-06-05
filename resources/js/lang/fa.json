@@ -1,0 +1,18 @@
+{
+    "___SIDEBAR_SECTION___": "--------SIDEBAR_SECTION----------",
+     
+    "dashboard": "دشبورد",
+    "dashboard2": "دشبورد دوم",
+    "users": "کارمندان",
+    "profile": "پروفایل",
+    "roles": "قوانین",
+    "activity_log": "لاگ فعالیت ها",
+
+    "___NAVBAR_SECTION___": "-----------NAVBAR_SECTION-----------",
+
+    "home": "صفحه اصلی",
+
+
+    "test_localizition": "چند نمونه متن کوتاه برای ساختن عنوان کارت و تشکیل بخش عمده ای از محتوای کارت."
+
+}
